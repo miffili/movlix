@@ -2,16 +2,24 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Movlix 🎥"/>
+    <MovieCard v-for="movie in movies" :key="movie.id" :movieData="movie"/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import MovieCard from './components/MovieCard.vue'
+
+import movies from './assets/seedMovies.js'
 
 export default {
   name: 'app',
+  data: () => ({
+    movies: movies,
+  }),
   components: {
-    HelloWorld
+    HelloWorld,
+    MovieCard
   }
 }
 </script>
@@ -21,8 +29,10 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
