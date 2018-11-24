@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Movlix 🎥"/>
-    <MovieCard v-for="movie in movies" :key="movie.id" :movieData="movie"/>
+    <MovieCard v-for="(movie, index) in movies" :key="movie.id" :index="index" :movieData="movie" v-on:log="removeMovie"/>
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
   components: {
     HelloWorld,
     MovieCard
+  },
+  methods: {
+    removeMovie: function(target) {
+      this.movies.splice(target.index, 1);
+    }
   }
 }
 </script>
