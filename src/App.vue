@@ -33,6 +33,21 @@ export default {
     MovieCard,
     MovieForm
   },
+  mounted() {
+    if (localStorage.getItem('movlix-movies')) {
+      try {
+        this.movies = JSON.parse(localStorage.getItem('movlix-movies'));
+      } catch (e) {
+        // console.error("couldn't fetch localStorage");
+        localStorage.removeItem('movlix-movies');
+      }
+    }
+  },
+  watch: {
+    movies() {
+      localStorage.setItem('movlix-movies', JSON.stringify(this.movies));
+    }
+  },
   methods: {
     removeMovie: function(target) {
       this.movies.splice(target.dataIndex, 1);
