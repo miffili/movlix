@@ -16,18 +16,20 @@ import movies from './assets/seedMovies.js'
 
 export default {
   name: 'app',
-  data: () => ({
-    movies: movies,
-    succId: 7,
-    newMovie: {
-      id: 0,
-      title: '',
-      year: '',
-      length: '',
-      rating: '',
-      desc: ''
+  data: function() {
+    return {
+      movies: movies,
+      succId: 0,
+      newMovie: {
+        id: 0,
+        title: '',
+        year: '',
+        length: '',
+        rating: '',
+        desc: ''
+      }
     }
-  }),
+  },
   components: {
     HelloWorld,
     MovieCard,
@@ -37,15 +39,22 @@ export default {
     if (localStorage.getItem('movlix-movies')) {
       try {
         this.movies = JSON.parse(localStorage.getItem('movlix-movies'));
+        this.succId = localStorage.succId;
       } catch (e) {
         // console.error("couldn't fetch localStorage");
         localStorage.removeItem('movlix-movies');
+        localStorage.removeItem('succId');
       }
+    } else {
+      this.succId = this.movies.length + 1;      
     }
   },
   watch: {
     movies() {
       localStorage.setItem('movlix-movies', JSON.stringify(this.movies));
+    },
+    succId() {
+      localStorage.succId = this.succId;
     }
   },
   methods: {
