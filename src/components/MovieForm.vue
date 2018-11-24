@@ -2,25 +2,26 @@
   <div class="movieForm">
     <fieldset>
       <label for="movie-title">Title</label>
-      <input type="text" name="movie-title" v-model="movieData.title" placeholder="">
+      <input type="text" name="movie-title" v-model.lazy="movieData.title" placeholder="">
     </fieldset>
     <fieldset>
       <label for="movie-year">Year</label>
-      <input type="number" name="movie-year" v-model="movieData.year">
+      <input type="number" name="movie-year" v-model.lazy="movieData.year">
     </fieldset>
     <fieldset>
       <label for="movie-length">Length (in min)</label>
-      <input type="number" name="movie-length" v-model="movieData.length">
+      <input type="number" name="movie-length" v-model.lazy="movieData.length">
     </fieldset>
     <fieldset>
       <label for="movie-rating">Rating (of 5)</label>
-      <input type="number" name="movie-rating" v-model="movieData.rating">
+      <input type="number" name="movie-rating" v-model.lazy="movieData.rating">
     </fieldset>
     <fieldset>
       <label for="movie-desc">Description</label>
-      <textarea name="movie-desc" rows="6" cols="60" v-model="movieData.desc"></textarea>
+      <textarea name="movie-desc" rows="6" cols="60" v-model.lazy="movieData.desc"></textarea>
     </fieldset>
-    <button type="button" name="button" v-on:click="$emit('addMovie')">Add Movie</button>
+    <button v-if="type === 'add'" type="button" name="button" v-on:click="$emit('addMovie')">Add Movie</button>
+    <button v-else-if="type === 'edit'" type="button" name="button" v-on:click="$emit('updateMovie')">Update Movie</button>
   </div>
 </template>
 
@@ -41,6 +42,7 @@ export default {
   padding: 1rem 2rem;
   margin-bottom: 2rem;
   border-radius: 0 0 5px 5px;
+  box-sizing: border-box;
 }
 .movieForm fieldset {
   border: none;
@@ -51,7 +53,6 @@ export default {
 }
 .movieForm * {
   width: 100%;
-  box-sizing: border-box;
 }
 .movieForm button {
   margin: 0.5rem 0;

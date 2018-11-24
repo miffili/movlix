@@ -2,8 +2,8 @@
 <div id="app">
   <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="Welcome to Movlix 🎥" />
-  <MovieForm v-on:addMovie="addMovie" :movieData="newMovie" />
-  <MovieCard v-for="(movie, index) in movies" :key="movie.id" :data-index="index" :movieData="movie" v-on:log="removeMovie" />
+  <MovieForm v-on:addMovie="addMovie" :movieData="newMovie" type="add"/>
+  <MovieCard v-for="(movie, index) in movies" :key="movie.id" :data-index="index" :movieData="movie" v-on:remove="removeMovie"/>
 </div>
 </template>
 
