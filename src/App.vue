@@ -1,16 +1,15 @@
 <template>
 <div id="app">
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Movlix 🎥" />
-  <MovieForm v-on:addMovie="addMovie" :movieData="newMovie" type="add"/>
-  <MovieCard v-for="(movie, index) in movies" :key="movie.id" :data-index="index" :movieData="movie" v-on:remove="removeMovie"/>
+  <TheHeader v-on:toggleForm="toggleForm" />
+  <MovieForm v-if="showForm" v-on:addMovie="addMovie" :movieData="newMovie" type="add" />
+  <MovieCard v-for="(movie, index) in movies" :key="movie.id" :data-index="index" :movieData="movie" v-on:remove="removeMovie" />
 </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import MovieCard from './components/MovieCard.vue'
 import MovieForm from './components/MovieForm.vue'
+import TheHeader from './components/TheHeader.vue'
 
 import movies from './assets/seedMovies.js'
 
@@ -27,13 +26,14 @@ export default {
         length: '',
         rating: '',
         desc: ''
-      }
+      },
+      showForm: false,
     }
   },
   components: {
-    HelloWorld,
     MovieCard,
-    MovieForm
+    MovieForm,
+    TheHeader
   },
   mounted() {
     if (localStorage.getItem('movlix-movies')) {
@@ -46,7 +46,7 @@ export default {
         localStorage.removeItem('succId');
       }
     } else {
-      this.succId = this.movies.length + 1;      
+      this.succId = this.movies.length + 1;
     }
   },
   watch: {
@@ -80,6 +80,10 @@ export default {
         desc: ''
       }
       this.succId++;
+      this.toggleForm();
+    },
+    toggleForm: function() {
+      this.showForm = !this.showForm
     }
   }
 }
@@ -91,7 +95,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -99,4 +102,8 @@ export default {
   padding: 0;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
 </style>
