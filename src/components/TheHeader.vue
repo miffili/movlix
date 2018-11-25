@@ -17,7 +17,6 @@ export default {
 
 <style lang="css" scoped>
   header {
-    margin: 0;
     padding: 2rem 3rem;
     width: 100%;
     display: flex;
