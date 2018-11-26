@@ -26,10 +26,10 @@ export default {
         title: '',
         year: '',
         length: '',
+        desc: '',
         rating: '',
-        desc: ''
       },
-      showForm: true,
+      showForm: false,
     }
   },
   components: {
@@ -69,7 +69,8 @@ export default {
         title: formMovie.title,
         year: formMovie.year,
         length: formMovie.length,
-        desc: formMovie.desc
+        desc: formMovie.desc,
+        rating: ''
       }
       this.movies.splice(0, 0, createMovie);
       this.newMovie = {
@@ -77,8 +78,8 @@ export default {
         title: '',
         year: '',
         length: '',
+        desc: '',
         rating: '',
-        desc: ''
       }
       this.succId++;
       this.toggleForm();
@@ -92,7 +93,7 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -117,15 +118,18 @@ button {
   border: none;
   border-radius: 3px;
   background: none;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 0.1rem;
   padding: 0.5rem 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  font-weight: normal;
 }
 button.primary {
   border: 2px solid hsla(265, 100%, 31%, 1);
   background-color: hsla(265, 100%, 31%, 1);
   color: white;
-  font-weight: bold;
+  font-weight: 600;
 }
 button.secondary {
   border: 2px solid hsla(265, 100%, 31%, 0.75);
@@ -133,6 +137,6 @@ button.secondary {
 }
 button:hover {
   box-shadow: 0.1rem 0.1rem 0.2rem 0.02rem rgba(0, 0, 0, 0.2);
-  transform: translateY(-0.05rem);
+  transform: translateY(-0.5rem);
 }
 </style>

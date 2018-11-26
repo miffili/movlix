@@ -1,29 +1,64 @@
 <template>
 <div class="movieCard">
-  <h3>{{ movieData.title }}</h3>
-  <div class="movieDetails">
-    <p>{{ movieData.year }}</p>
-    <p><em>{{ movieData.length }} min</em></p>
-    <p>{{ movieData.rating }} / 5</p>
+  <div v-if="openCard">
+    <!-- <div class="cardHead">
+      <h3>{{ movieData.title }}</h3>
+      <p>{{ movieData.year }}</p>
+    </div> -->
+    <div class="cardHead">
+      <h3><span class="title">{{ movieData.title }}</span><span class="year">{{ movieData.year }}</span></h3>
+    </div>
+    <div class="cardDesc">
+      <p v-if="movieData.desc">{{ movieData.desc }}</p>
+      <p v-else><em>Description not provided</em></p>
+    </div>
+    <div class="cardDetails">
+      <p v-if="movieData.length"><em>{{ prettyLength }}</em></p>
+      <p v-if="movieData.rating">{{ movieData.rating }} / 5</p>
+      <p v-else>no rating yet</p>
+      <p v-on:click="toggleOpen">close</p>
+    </div>
+    <div class="cardFunctions"
+      v-if="openCard">
+      <button
+        type="button"
+        name="remove"
+        class="delete"
+        v-on:click="$emit('remove', $event.target)"
+      >Delete Movie</button>
+      <button
+        type="button"
+        name="edit"
+        class="primary"
+      >Edit</button>
+    </div>
   </div>
-  <p v-if="movieData.desc">{{ movieData.desc }}</p>
-  <p v-else>Good evening, I'm Doctor Emmett Brown. I'm standing on the parking lot of Twin Pines Mall. It's Saturday morning, October 26, 1985, 1:18 a.m. and this is temporal experiment number one. C'mon, Einy, hey hey boy, get in there, that a boy, in you go, get down, that's it. Doc, wait. No, bastards. But you're good, Marty, you're really good. And this audition tape of your is great, you gotta send it in to the record company. It's like Doc's always saying. Well, what if they didn't like them, what if they told me I was no good. I guess that would be pretty hard for somebody to understand. Are you gonna order something, kid?</p>
-  <div class="functions">
-    <button type="button" name="remove" v-on:click="$emit('remove', $event.target)">Remove</button>
-    <button type="button" name="edit" v-on:click="toggleForm">Edit</button>
+  <div v-else class="closedCard">
+    <div class="cardHead">
+      <h3>{{ movieData.title }}</h3>
+      <p>{{ movieData.year }}</p>
+    </div>
+    <div class="cardDesc">
+      <p v-if="movieData.desc">{{ movieData.desc }}</p>
+      <p v-else><em>Description not provided</em></p>
+    </div>
+    <div class="cardDetails">
+      <p v-if="movieData.length"><em>{{ prettyLength }}</em></p>
+      <p v-if="movieData.rating">{{ movieData.rating }} / 5</p>
+      <p v-else>no rating yet</p>
+      <p v-on:click="toggleOpen">more...</p>
+    </div>
   </div>
-  <MovieForm v-if="showForm" type="edit" :movieData="movieData" v-on:updateMovie="toggleForm"/>
 </div>
 </template>
 
 <script>
-import MovieForm from './MovieForm.vue'
-
 export default {
-  name: 'MovieCard',
-  data: () => ({
-    showForm: false,
-  }),
+  data: function() {
+    return {
+      openCard: false
+    }
+  },
   props: {
     movieData: {
       id: Number,
@@ -34,55 +69,103 @@ export default {
       desc: String
     }
   },
-  components: {
-    MovieForm
-  },
   methods: {
-    toggleForm: function() {
-      this.showForm = !this.showForm
+    toggleOpen: function() {
+      this.openCard = !this.openCard
     }
-  }
+  },
+  computed: {
+    prettyLength: function() {
+      const length = this.movieData.length;
+      const hours = length > 60 ? `${Math.floor(length/60)}h` : '';
+      const minutes = `${length % 60}min`
+      return `${hours} ${minutes}`;
+    }
+  },
 }
 </script>
 
 <style lang="css" scoped>
   .movieCard {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 60vw;
     padding: 1rem 2rem;
     border-radius: 5px;
     box-shadow: .25rem .25rem 1rem 0 hsla(0, 0%, 0%, 0.1);
     background-color: white;
     margin-bottom: 1rem;
     box-sizing: border-box;
+    position: relative;
   }
   .movieCard:hover {
     transform: scale(1.05);
   }
-  .movieDetails {
+  .movieCard>div {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    padding: 0;
+    padding-bottom: 3rem;
   }
-  .movieDetails p {
-    padding: 0 1rem;
+  .movieCard .closedCard {
+    padding-bottom: 0rem;
+  }
+  .cardHead {
+    display: flex;
+    align-items: baseline;
+    max-width: 100%;
+  }
+  h3 {
+    padding-right: 0.5rem;
+    font-size: 1.3rem;
+  }
+  .closedCard h3 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .title {
+    padding-right: 0.5rem;
+  }
+  .year {
+    opacity: 0.4;
+    font-size: 1rem;
     margin: 0;
-    border-right: solid 1px black;
   }
-  .movieDetails p:first-child {
+  .closedCard .cardDesc {
+    max-width: 100%;
+  }
+  .closedCard .cardDesc p {
+    padding-right: 0.5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .cardDetails {
+    display: flex;
+  }
+  .cardDetails > * {
+    padding: 0 0.5rem;
+    border-left: 1px solid black;
+  }
+  .cardDetails>*:first-child {
+    border-left: none;
     padding-left: 0;
   }
-  .movieDetails p:last-child {
-    padding-right: 0;
-    border-right: none;
+  .cardFunctions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
   }
-  .functions button:first-child {
+  .cardFunctions button:first-child {
     margin-right: 0.5rem;
   }
-  .movieCard .movieForm {
-    margin: 1rem 0;
-    width: 100%;
+  button.delete {
+    border: 1px solid hsla(0, 100%, 31%, 0.8);
+    color: hsla(0, 100%, 31%, 0.8);
+    /* font-weight: 300; */
   }
 </style>
