@@ -13,6 +13,7 @@ import MovieCard from './components/MovieCard.vue'
 import FormAddMovie from './components/FormAddMovie.vue'
 import TheHeader from './components/TheHeader.vue'
 
+import { EventBus } from './Events.js'
 import movies from './assets/seedMovies.js'
 
 export default {
@@ -30,6 +31,10 @@ export default {
         rating: '',
       },
       showForm: false,
+      updateRating: {
+        updatedId: '',
+        stars: ''
+      }
     }
   },
   components: {
@@ -50,6 +55,13 @@ export default {
     } else {
       this.succId = this.movies.length + 1;
     }
+
+    EventBus.$on('updateRating', (updatedRating, movieId) => {
+      this.updateRating = {
+        updatedId: movieId,
+        stars: updatedRating
+      }
+    });
   },
   watch: {
     movies() {
@@ -57,6 +69,13 @@ export default {
     },
     succId() {
       localStorage.succId = this.succId;
+    },
+    updateRating() {
+      const movId = this.updateRating.updatedId;
+      const movStars = this.updateRating.stars;
+      const moviesIndex = this.movies.findIndex((movie) => movie.id === movId);
+      
+      this.movies[moviesIndex].rating = movStars;
     }
   },
   methods: {

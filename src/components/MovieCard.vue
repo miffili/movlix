@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import RateMovie from './RateMovie.vue'
+
 export default {
   data: function() {
     return {
