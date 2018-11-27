@@ -9,7 +9,7 @@
       </svg>
     </li>
   </ul>
-  <span v-if="this.stars >= 0" class="counter">{{ stars }} | {{ maxStars }}</span>
+  <span v-if="this.stars >= 0" class="counter">{{ stars }}<span class="ofMax">/{{ maxStars }}</span></span>
 </div>
 <div v-else class="rating" :class="{'not-rated': !rated}" v-on:click="enableRating">
   <svg viewBox="5 5 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,11 +82,16 @@ export default {
     fill: hsla(46, 92%, 64%, 0.5);
   }
   .list:hover ~ .counter {
-    opacity: 0.7;
+    opacity: 1;
   }
   .counter {
     padding-left: 0.25rem;
+    font-size: 1rem;
+    letter-spacing: 0.08rem;
     opacity: 0;
+  }
+  .ofMax {
+    font-size: 0.7rem;
   }
   .star {
     cursor: pointer;
@@ -135,7 +140,7 @@ export default {
     width: 1rem;
     height: 1rem;
     fill: goldenrod;
-    margin-right: 0.25rem;
+    margin-right: 0.15rem;
     opacity: 0.5;
   }
   .cta {

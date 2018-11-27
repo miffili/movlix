@@ -1,31 +1,29 @@
 <template>
-<div class="movieCard">
+<div class="movie-card">
   <div
     v-if="!editOpen"
-    class="displayInfo"
-    :class="{'edit-movie': editOpen, 'open' : openMenu}"
+    class="display-info"
+    :class="{'open' : openMenu}"
   >
-    <div class="cardHead">
-      <h3>
+    <div class="card-head">
+      <h3 class="title">
         {{ movieData.title }}
-        <span>{{ movieData.year }}</span>
+        <span class="year">{{ movieData.year }}</span>
       </h3>
     </div>
-    <div class="cardDesc">
+    <div class="card-desc">
       <p v-if="movieData.desc">{{ movieData.desc }}</p>
       <p v-else><em>Description not provided</em></p>
     </div>
-    <div class="cardDetails">
-      <span v-if="movieData.length"><em>{{ prettyLength }}</em></span>
+    <div class="card-details">
+      <span v-if="movieData.length" class="length">{{ prettyLength }}</span>
       <MovieRating
         :grade="ratingInNumber"
-        :maxStars="5"
-        :hasCounter="true"
         :movieId="this.movieData.id"
       />
       <div
         class="toggle"
-        v-on:click="openMenu = !openMenu"
+        @click="toggle('openMenu')"
         :class="{'toggle-open': openMenu}"
         title="open menu"
       >
@@ -47,14 +45,13 @@
   </div>
   <div
     v-else
-    class="editInfo"
-    :class="{'edit-movie': editOpen}"
+    class="edit-info"
   >
     <MovieForm
       :movieId="movieData.id"
       :movieData="editedMovie"
       :type="'editMovie'"
-      v-on:dataEdit="reflectChanges"
+      @dataEdit="reflectChanges"
     />
     <span
       class="invalid"
@@ -62,20 +59,20 @@
     >Please correct the marked fields.</span>
   </div>
   <div
-    class="cardFunctions"
+    class="card-functions"
     v-if="openMenu"
   >
     <button
       type="button"
       name="remove"
       class="delete"
-      v-on:click="$emit('remove', $event.target)"
+      @click="$emit('remove', $event.target)"
     >Delete Movie</button>
     <button
       type="button"
       name="edit"
       class="primary"
-      v-on:click="toggleEdit"
+      @click="toggle('editOpen')"
       v-if="!editOpen"
     >Edit</button>
     <div v-else>
@@ -83,13 +80,13 @@
         type="button"
         name="cancel"
         class="secondary"
-        v-on:click="cancelEdit"
+        @click="cancelEdit"
       >Cancel</button>
       <button
         type="button"
         name="save"
         class="primary"
-        v-on:click="saveChanges"
+        @click="saveChanges"
         :disabled="invalidForm"
       >Save</button>
     </div>
@@ -100,7 +97,22 @@
 <script>
 import MovieRating from './MovieRating.vue'
 import MovieForm from './MovieForm.vue'
+
 export default {
+  components: {
+    MovieRating,
+    MovieForm
+  },
+  props: {
+    movieData: {
+      id: Number,
+      title: String,
+      year: Number,
+      length: Number,
+      rating: [ String, Number ],
+      desc: String
+    }
+  },
   data() {
     return {
       openMenu: false,
@@ -116,19 +128,23 @@ export default {
       invalidInput: false
     }
   },
-  props: {
-    movieData: {
-      id: Number,
-      title: String,
-      year: Number,
-      length: Number,
-      rating: [ String, Number ],
-      desc: String
+  computed: {
+    prettyLength: function() {
+      const length = this.movieData.length
+      const hours = length > 60 ? `${Math.floor(length/60)}h` : ''
+      const minutes = `${length % 60}min`
+      return `${hours} ${minutes}`
+    },
+    ratingInNumber: function() {
+      return parseInt( this.movieData.rating )
+    },
+    invalidForm: function() {
+      return ( this.invalidInput && !this.disableSave )
     }
   },
   methods: {
-    toggleEdit: function() {
-      this.editOpen = !this.editOpen
+    toggle: function(el) {
+      this[el] = !this[el]
     },
     reflectChanges: function( emittedData, enableSaving ) {
       if ( enableSaving !== this.enableSaving ) {
@@ -141,7 +157,7 @@ export default {
       if ( emittedData.length !== this.editedMovie.length ) this.editedMovie.length = emittedData.length;
     },
     cancelEdit: function() {
-      this.toggleEdit();
+      this.toggle('editOpen');
       this.editedMovie.title = this.movieData.title;
       this.editedMovie.year = this.movieData.year;
       this.editedMovie.length = this.movieData.length;
@@ -149,144 +165,122 @@ export default {
     },
     saveChanges: function() {
       if ( this.enableSaving ) {
-        this.toggleEdit();
+        this.toggle('editOpen');
         this.$emit( 'save', this.movieData.id, this.editedMovie );
       } else {
         this.invalidInput = true;
       }
     }
   },
-  computed: {
-    prettyLength: function() {
-      const length = this.movieData.length;
-      const hours = length > 60 ? `${Math.floor(length/60)}h` : '';
-      const minutes = `${length % 60}min`
-      return `${hours} ${minutes}`;
-    },
-    ratingInNumber: function() {
-      const grade = this.movieData.rating;
-      return parseInt( grade );
-    },
-    invalidForm: function() {
-      return ( this.invalidInput && !this.disableSave );
-      // return false;
-    }
-  },
-  components: {
-    MovieRating,
-    MovieForm
-  }
 }
 </script>
 
 <style lang="css" scoped>
-  .movieCard {
-    padding: 1rem 2rem;
-    border-radius: 5px;
-    box-shadow: .25rem .25rem 1rem 0 hsla(0, 0%, 0%, 0.1);
-    background-color: white;
+  .movie-card {
+    box-sizing: border-box;
+    position: relative;
     margin-bottom: 1rem;
-    box-sizing: border-box;
-    position: relative;
+    padding: 1rem 2rem 1.5rem;
+    background-color: hsla(265, 100%, 99.5%, 1);
+    box-shadow: 0 0.05rem 0.1rem 0 hsla(0, 0%, 0%, 0.1);
+    border-radius: 5px;
   }
-  .movieCard:hover {
-    /* transform: scale(1.05); */
+  .movie-card:hover {
+    box-shadow: .35rem .35rem 0.3rem 0 hsla(0, 0%, 0%, 0.05);
+    transform: scale(1.01);
   }
-  .cardHead {
-    display: flex;
-    align-items: baseline;
-    width: 100%;
-  }
-  .cardHead h3 {
-    padding-right: 1rem;
-    font-size: 1.3rem;
-  }
-  .cardHead h3 span {
-    font-size: 1rem;
-    opacity: 0.7;
-    font-weight: 400;
-  }
-  .title {
-    padding-right: 0.5rem;
-  }
-  .year {
-    opacity: 0.4;
-    font-size: 1rem;
-    margin: 0;
-  }
-  .cardDesc {
-    max-width: 100%;
-  }
-  .cardDesc p {
-    padding-right: 0.5rem;
-  }
-  .cardDetails {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    position: relative;
-  }
-  .cardDetails > * {
-    padding: 0 0.5rem;
-    border-left: 1px solid black;
-  }
-  .cardDetails>*:first-child {
-    border-left: none;
-    padding-left: 0;
-  }
-  .cardFunctions {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    box-sizing: border-box;
-  }
-  .cardFunctions button:first-child {
-    margin-right: 0.5rem;
-  }
-  button.delete {
-    border: 1px solid hsla(0, 100%, 31%, 0.8);
-    color: hsla(0, 100%, 31%, 0.8);
-  }
-  .toggle {
-    border: none;
-  }
-  .displayInfo {
+  .display-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding-bottom: 0rem;
   }
-  .editInfo {
-    padding-bottom: 4rem;
-    margin-bottom: 0.5rem;
-    width: 100%;
-  }
   .open {
     padding-bottom: 4rem;
   }
-  .editInfo .invalid {
-    font-size: 0.85rem;
-    color: red;
+  .card-head {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+  }
+  .card-head .title {
+    padding-right: 1rem;
+    font-size: 1.3rem;
+    margin-bottom: 0;
+  }
+  .card-head .year {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.7;
+  }
+  .card-desc {
+    width: 100%;
+  }
+  .card-desc p {
+    padding-right: 0.5rem;
+  }
+  .card-details {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .card-details > * {
+    padding: 0 0.5rem;
+    border-left: 2px solid hsla(0, 0%, 0%, 0.4);
+  }
+  .card-details>*:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+  .length {
+    font-size: 0.9rem;;
   }
   .toggle {
-    display: block;
-    height: 1rem;
     width: 1rem;
+    height: 1rem;
+    padding-right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     position: absolute;
+    border: none;
     right: 0;
     transition: transform 0.3s;
+  }
+  .open .toggle-open {
+    transform: scaleY(-1);
   }
   .toggle svg {
     width: 100%;
     height: 100%;
     stroke: black;
   }
-  .open .toggle-open {
-    transform: scaleY(-1);
+  .card-functions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 1rem 2rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+  }
+  .card-functions button:first-child {
+    margin-right: 0.5rem;
+  }
+  .delete {
+    border: 1px solid hsla(0, 100%, 31%, 0.8);
+    color: hsla(0, 100%, 31%, 0.8);
+  }
+  .edit-info {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding-bottom: 4rem;
+  }
+  .edit-info .invalid {
+    font-size: 0.85rem;
+    color: red;
   }
 </style>

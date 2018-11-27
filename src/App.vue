@@ -151,6 +151,7 @@ export default {
   align-items: center;
   margin: 0 auto;
   padding: 0;
+  background-color: hsla(265, 10%, 94%, 1);
 }
 
 main {
@@ -192,7 +193,7 @@ button.secondary {
 }
 
 button:hover {
-  box-shadow: 0.1rem 0.1rem 0.2rem 0.02rem rgba(0, 0, 0, 0.2);
-  transform: translateY(-0.15rem);
+  box-shadow: 0.1rem 0.1rem 0.2rem 0.05rem hsla(0, 0%, 0%, 0.07);
+  transform: translateY(-0.1rem);
 }
 </style>
