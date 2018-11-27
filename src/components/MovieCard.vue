@@ -1,77 +1,97 @@
 <template>
 <div class="movieCard">
-  <div class="closedCard">
-    <div
-      v-if="!editOpen"
-      class="displayInfo"
-      :class="{'edit-movie': editOpen}"
-    >
-      <div class="cardHead">
-        <h3>
-          {{ movieData.title }}
-        </h3>
-        <p>{{ movieData.year }}</p>
-      </div>
-      <div class="cardDesc">
-        <p v-if="movieData.desc">{{ movieData.desc }}</p>
-        <p v-else><em>Description not provided</em></p>
-      </div>
-      <div class="cardDetails">
-        <!-- Length -->
-        <span v-if="movieData.length"><em>{{ prettyLength }}</em></span>
-        <RateMovie
-          :grade="ratingInNumber"
-          :maxStars="5"
-          :hasCounter="true"
-          :movieId="this.movieData.id"
-        />
-      </div>
+  <div
+    v-if="!editOpen"
+    class="displayInfo"
+    :class="{'edit-movie': editOpen, 'open' : openMenu}"
+  >
+    <div class="cardHead">
+      <h3>
+        {{ movieData.title }}
+        <span>{{ movieData.year }}</span>
+      </h3>
     </div>
-    <div
-      v-else
-      class="editInfo"
-      :class="{'edit-movie': editOpen}"
-    >
-      <MovieForm
-        :movieId="movieData.id"
-        :movieData="editedMovie"
-        :type="'editMovie'"
-        v-on:dataEdit="reflectChanges"
+    <div class="cardDesc">
+      <p v-if="movieData.desc">{{ movieData.desc }}</p>
+      <p v-else><em>Description not provided</em></p>
+    </div>
+    <div class="cardDetails">
+      <span v-if="movieData.length"><em>{{ prettyLength }}</em></span>
+      <RateMovie
+        :grade="ratingInNumber"
+        :maxStars="5"
+        :hasCounter="true"
+        :movieId="this.movieData.id"
       />
-      <span
-        class="invalid"
-        v-if="invalidForm"
-      >Please correct the marked fields.</span>
-    </div>
-    <div class="cardFunctions">
-      <button
-        type="button"
-        name="remove"
-        class="delete"
-        v-on:click="$emit('remove', $event.target)"
-      >Delete Movie</button>
-      <button
-        type="button"
-        name="edit"
-        class="primary"
-        v-on:click="toggleEdit"
-        v-if="!editOpen"
-      >Edit</button>
-      <div v-else>
-        <button
-          type="button"
-          name="cancel"
-          class="secondary"
-          v-on:click="cancelEdit"
-        >Cancel</button>
-        <button
-          type="button"
-          name="save"
-          class="primary"
-          v-on:click="saveChanges"
-          :disabled="invalidForm"
-        >Save</button>
+      <div
+        class="toggle"
+        v-on:click="openMenu = !openMenu"
+        :class="{'toggle-open': openMenu}"
+        title="open menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="81"
+          height="81"
+          viewBox="0 0 81 81"
+          fill="none"
+        >
+          <path
+            d="M3 20L38.2863 58.5797C39.4757 59.88 41.5243 59.88 42.7137 58.5797L78 20"
+            stroke-width="8"
+            stroke-linecap="round"
+          />
+        </svg>
       </div>
+    </div>
+  </div>
+  <div
+    v-else
+    class="editInfo"
+    :class="{'edit-movie': editOpen}"
+  >
+    <MovieForm
+      :movieId="movieData.id"
+      :movieData="editedMovie"
+      :type="'editMovie'"
+      v-on:dataEdit="reflectChanges"
+    />
+    <span
+      class="invalid"
+      v-if="invalidForm"
+    >Please correct the marked fields.</span>
+  </div>
+  <div
+    class="cardFunctions"
+    v-if="openMenu"
+  >
+    <button
+      type="button"
+      name="remove"
+      class="delete"
+      v-on:click="$emit('remove', $event.target)"
+    >Delete Movie</button>
+    <button
+      type="button"
+      name="edit"
+      class="primary"
+      v-on:click="toggleEdit"
+      v-if="!editOpen"
+    >Edit</button>
+    <div v-else>
+      <button
+        type="button"
+        name="cancel"
+        class="secondary"
+        v-on:click="cancelEdit"
+      >Cancel</button>
+      <button
+        type="button"
+        name="save"
+        class="primary"
+        v-on:click="saveChanges"
+        :disabled="invalidForm"
+      >Save</button>
     </div>
   </div>
 </div>
@@ -83,7 +103,7 @@ import MovieForm from './MovieForm.vue'
 export default {
   data() {
     return {
-      openCard: false,
+      openMenu: false,
       editOpen: false,
       editedMovie: {
         title: this.movieData.title,
@@ -172,20 +192,19 @@ export default {
   .movieCard:hover {
     /* transform: scale(1.05); */
   }
-  .movieCard>div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 4rem;
-  }
   .cardHead {
     display: flex;
     align-items: baseline;
     width: 100%;
   }
-  h3 {
-    padding-right: 0.5rem;
+  .cardHead h3 {
+    padding-right: 1rem;
     font-size: 1.3rem;
+  }
+  .cardHead h3 span {
+    font-size: 1rem;
+    opacity: 0.7;
+    font-weight: 400;
   }
   .title {
     padding-right: 0.5rem;
@@ -203,7 +222,9 @@ export default {
   }
   .cardDetails {
     display: flex;
+    align-items: center;
     width: 100%;
+    position: relative;
   }
   .cardDetails > * {
     padding: 0 0.5rem;
@@ -231,12 +252,41 @@ export default {
     border: 1px solid hsla(0, 100%, 31%, 0.8);
     color: hsla(0, 100%, 31%, 0.8);
   }
+  .toggle {
+    border: none;
+  }
+  .displayInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 0rem;
+  }
   .editInfo {
+    padding-bottom: 4rem;
     margin-bottom: 0.5rem;
     width: 100%;
+  }
+  .open {
+    padding-bottom: 4rem;
   }
   .editInfo .invalid {
     font-size: 0.85rem;
     color: red;
+  }
+  .toggle {
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    position: absolute;
+    right: 0;
+    transition: transform 0.3s;
+  }
+  .toggle svg {
+    width: 100%;
+    height: 100%;
+    stroke: black;
+  }
+  .open .toggle-open {
+    transform: scaleY(-1);
   }
 </style>
