@@ -14,9 +14,11 @@
     </div>
     <div class="cardDetails">
       <p v-if="movieData.length"><em>{{ prettyLength }}</em></p>
-      <p v-if="movieData.rating">{{ movieData.rating }} / 5</p>
-      <p v-else>no rating yet</p>
-      <p v-on:click="toggleOpen">close</p>
+      <!-- RATING -->
+      <RateMovie :grade="ratingInNumber" :maxStars="5" :hasCounter="true"/>
+      <!-- <div v-else>
+        movie already rated
+      </div> -->
     </div>
     <div class="cardFunctions"
       v-if="openCard">
@@ -65,7 +67,7 @@ export default {
       title: String,
       year: Number,
       length: Number,
-      rating: Number,
+      rating: [String, Number],
       desc: String
     }
   },
@@ -80,8 +82,15 @@ export default {
       const hours = length > 60 ? `${Math.floor(length/60)}h` : '';
       const minutes = `${length % 60}min`
       return `${hours} ${minutes}`;
+    },
+    ratingInNumber: function() {
+      const grade = this.movieData.rating;
+      return parseInt(grade);
     }
   },
+  components: {
+    RateMovie
+}
 }
 </script>
 
