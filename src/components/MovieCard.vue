@@ -17,7 +17,7 @@
     </div>
     <div class="cardDetails">
       <span v-if="movieData.length"><em>{{ prettyLength }}</em></span>
-      <RateMovie
+      <MovieRating
         :grade="ratingInNumber"
         :maxStars="5"
         :hasCounter="true"
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import RateMovie from './RateMovie.vue'
+import MovieRating from './MovieRating.vue'
 import MovieForm from './MovieForm.vue'
 export default {
   data() {
@@ -173,7 +173,7 @@ export default {
     }
   },
   components: {
-    RateMovie,
+    MovieRating,
     MovieForm
   }
 }
