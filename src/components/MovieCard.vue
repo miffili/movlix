@@ -1,27 +1,49 @@
 <template>
 <div class="movieCard">
-  <div v-if="openCard">
-    <!-- <div class="cardHead">
-      <h3>{{ movieData.title }}</h3>
-      <p>{{ movieData.year }}</p>
-    </div> -->
-    <div class="cardHead">
-      <h3><span class="title">{{ movieData.title }}</span><span class="year">{{ movieData.year }}</span></h3>
+  <div class="closedCard">
+    <div
+      v-if="!editOpen"
+      class="displayInfo"
+      :class="{'edit-movie': editOpen}"
+    >
+      <div class="cardHead">
+        <h3>
+          {{ movieData.title }}
+        </h3>
+        <p>{{ movieData.year }}</p>
+      </div>
+      <div class="cardDesc">
+        <p v-if="movieData.desc">{{ movieData.desc }}</p>
+        <p v-else><em>Description not provided</em></p>
+      </div>
+      <div class="cardDetails">
+        <!-- Length -->
+        <span v-if="movieData.length"><em>{{ prettyLength }}</em></span>
+        <RateMovie
+          :grade="ratingInNumber"
+          :maxStars="5"
+          :hasCounter="true"
+          :movieId="this.movieData.id"
+        />
+      </div>
     </div>
-    <div class="cardDesc">
-      <p v-if="movieData.desc">{{ movieData.desc }}</p>
-      <p v-else><em>Description not provided</em></p>
+    <div
+      v-else
+      class="editInfo"
+      :class="{'edit-movie': editOpen}"
+    >
+      <MovieForm
+        :movieId="movieData.id"
+        :movieData="editedMovie"
+        :type="'editMovie'"
+        v-on:dataEdit="reflectChanges"
+      />
+      <span
+        class="invalid"
+        v-if="invalidForm"
+      >Please correct the marked fields.</span>
     </div>
-    <div class="cardDetails">
-      <p v-if="movieData.length"><em>{{ prettyLength }}</em></p>
-      <!-- RATING -->
-      <RateMovie :grade="ratingInNumber" :maxStars="5" :hasCounter="true"/>
-      <!-- <div v-else>
-        movie already rated
-      </div> -->
-    </div>
-    <div class="cardFunctions"
-      v-if="openCard">
+    <div class="cardFunctions">
       <button
         type="button"
         name="remove"
@@ -32,23 +54,24 @@
         type="button"
         name="edit"
         class="primary"
+        v-on:click="toggleEdit"
+        v-if="!editOpen"
       >Edit</button>
-    </div>
-  </div>
-  <div v-else class="closedCard">
-    <div class="cardHead">
-      <h3>{{ movieData.title }}</h3>
-      <p>{{ movieData.year }}</p>
-    </div>
-    <div class="cardDesc">
-      <p v-if="movieData.desc">{{ movieData.desc }}</p>
-      <p v-else><em>Description not provided</em></p>
-    </div>
-    <div class="cardDetails">
-      <p v-if="movieData.length"><em>{{ prettyLength }}</em></p>
-      <p v-if="movieData.rating">{{ movieData.rating }} / 5</p>
-      <p v-else>no rating yet</p>
-      <p v-on:click="toggleOpen">more...</p>
+      <div v-else>
+        <button
+          type="button"
+          name="cancel"
+          class="secondary"
+          v-on:click="cancelEdit"
+        >Cancel</button>
+        <button
+          type="button"
+          name="save"
+          class="primary"
+          v-on:click="saveChanges"
+          :disabled="invalidForm"
+        >Save</button>
+      </div>
     </div>
   </div>
 </div>
@@ -56,11 +79,21 @@
 
 <script>
 import RateMovie from './RateMovie.vue'
-
+import MovieForm from './MovieForm.vue'
 export default {
-  data: function() {
+  data() {
     return {
-      openCard: false
+      openCard: false,
+      editOpen: false,
+      editedMovie: {
+        title: this.movieData.title,
+        year: this.movieData.year,
+        length: this.movieData.length,
+        desc: this.movieData.desc,
+      },
+      receivedData: '',
+      enableSaving: true,
+      invalidInput: false
     }
   },
   props: {
@@ -69,13 +102,38 @@ export default {
       title: String,
       year: Number,
       length: Number,
-      rating: [String, Number],
+      rating: [ String, Number ],
       desc: String
     }
   },
   methods: {
-    toggleOpen: function() {
-      this.openCard = !this.openCard
+    toggleEdit: function() {
+      this.editOpen = !this.editOpen
+    },
+    reflectChanges: function( emittedData, enableSaving ) {
+      if ( enableSaving !== this.enableSaving ) {
+        this.enableSaving = enableSaving;
+        this.invalidInput = false;
+      }
+      if ( emittedData.title !== this.editedMovie.title ) this.editedMovie.title = emittedData.title;
+      if ( emittedData.year !== this.editedMovie.year ) this.editedMovie.year = emittedData.year;
+      if ( emittedData.desc !== this.editedMovie.desc ) this.editedMovie.desc = emittedData.desc;
+      if ( emittedData.length !== this.editedMovie.length ) this.editedMovie.length = emittedData.length;
+    },
+    cancelEdit: function() {
+      this.toggleEdit();
+      this.editedMovie.title = this.movieData.title;
+      this.editedMovie.year = this.movieData.year;
+      this.editedMovie.length = this.movieData.length;
+      this.editedMovie.desc = this.movieData.desc;
+    },
+    saveChanges: function() {
+      if ( this.enableSaving ) {
+        this.toggleEdit();
+        this.$emit( 'save', this.movieData.id, this.editedMovie );
+      } else {
+        this.invalidInput = true;
+      }
     }
   },
   computed: {
@@ -87,12 +145,17 @@ export default {
     },
     ratingInNumber: function() {
       const grade = this.movieData.rating;
-      return parseInt(grade);
+      return parseInt( grade );
+    },
+    invalidForm: function() {
+      return ( this.invalidInput && !this.disableSave );
+      // return false;
     }
   },
   components: {
-    RateMovie
-}
+    RateMovie,
+    MovieForm
+  }
 }
 </script>
 
@@ -107,30 +170,22 @@ export default {
     position: relative;
   }
   .movieCard:hover {
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
   }
   .movieCard>div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-bottom: 3rem;
-  }
-  .movieCard .closedCard {
-    padding-bottom: 0rem;
+    padding-bottom: 4rem;
   }
   .cardHead {
     display: flex;
     align-items: baseline;
-    max-width: 100%;
+    width: 100%;
   }
   h3 {
     padding-right: 0.5rem;
     font-size: 1.3rem;
-  }
-  .closedCard h3 {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
   .title {
     padding-right: 0.5rem;
@@ -140,17 +195,15 @@ export default {
     font-size: 1rem;
     margin: 0;
   }
-  .closedCard .cardDesc {
+  .cardDesc {
     max-width: 100%;
   }
-  .closedCard .cardDesc p {
+  .cardDesc p {
     padding-right: 0.5rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
   .cardDetails {
     display: flex;
+    width: 100%;
   }
   .cardDetails > * {
     padding: 0 0.5rem;
@@ -177,6 +230,13 @@ export default {
   button.delete {
     border: 1px solid hsla(0, 100%, 31%, 0.8);
     color: hsla(0, 100%, 31%, 0.8);
-    /* font-weight: 300; */
+  }
+  .editInfo {
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  .editInfo .invalid {
+    font-size: 0.85rem;
+    color: red;
   }
 </style>
