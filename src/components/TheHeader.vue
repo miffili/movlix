@@ -26,7 +26,7 @@ export default {
 
 <style lang="css" scoped>
   header {
-    width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     padding: 1.75rem 0.5rem;
@@ -37,7 +37,7 @@ export default {
     box-sizing: border-box;
   }
   .logo {
-    height: 3rem;
+    height: 2.5rem;
     opacity: 0.85;
     align-self: flex-start;
   }

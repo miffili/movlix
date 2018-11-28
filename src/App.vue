@@ -21,6 +21,7 @@
       @save="updateMovie"
     />
   </main>
+  <TheFooter />
 </div>
 </template>
 
@@ -28,6 +29,7 @@
 import MovieCard from './components/MovieCard.vue'
 import MovieForm from './components/MovieForm.vue'
 import TheHeader from './components/TheHeader.vue'
+import TheFooter from './components/TheFooter.vue'
 
 import {
   EventBus
@@ -39,7 +41,8 @@ export default {
   components: {
     MovieCard,
     MovieForm,
-    TheHeader
+    TheHeader,
+    TheFooter
   },
   data() {
     return {
@@ -154,9 +157,10 @@ export default {
   font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 0 5.25rem;
   color: #0c0b0f;
   background-color: hsla(265, 17%, 93%, 1);
   background-image: url('./assets/topography.svg');
