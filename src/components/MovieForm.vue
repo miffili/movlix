@@ -51,7 +51,8 @@
         type="number"
         name="length"
         v-model="formMovie.length"
-        v-validate="'numeric|min:1|min_value:1'"
+        v-validate="'numeric|min_value:1'"
+        data-vv-validate-on="input"
         data-vv-scope="addMovie"
         :class="{ 'invalid': errors.has('addMovie.length')}"
       >
@@ -156,7 +157,8 @@
         name="length"
         placeholder="Length (in min)"
         v-model="formMovie.length"
-        v-validate="'numeric|min:1|min_value:1'"
+        v-validate="'numeric|min_value:1'"
+        data-vv-validate-on="input"
         :data-vv-scope="`edit${movieData.id}`"
         :class="{ 'invalid': errors.has(`edit${movieData.id}.length`) }"
       >

@@ -18,7 +18,7 @@ const dict = {
       max_value: () => 'Year must be 2030 or earlier'
     },
     length: {
-      numeric: () => 'Length doesn\'t accept decimals.',
+      numeric: () => 'Length cannot have decimals.',
       min_value: () => 'Minimum length is 1 minute.'
     }
   }
