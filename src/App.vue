@@ -5,6 +5,7 @@
     :showForm="showForm"
   />
   <main>
+    <p v-if="showNotification">There are no movies in the database yet.</p>
     <MovieForm
       v-if="showForm"
       @addMovie="addMovie"
@@ -34,7 +35,7 @@ import TheFooter from './components/TheFooter.vue'
 import {
   EventBus
 } from './Events.js'
-import movies from './assets/seedMovies.js'
+// import movies from './assets/seedMovies.js'
 
 export default {
   name: 'app',
@@ -46,7 +47,8 @@ export default {
   },
   data() {
     return {
-      movies: movies,
+      // movies: movies,
+      movies: [],
       succId: 0,
       newMovie: {
         id: 0,
@@ -65,27 +67,27 @@ export default {
   },
   watch: {
     succId() {
-      localStorage.succId = this.succId;
+      localStorage.succId = this.succId
     },
     updateRating() {
-      const movId = this.updateRating.updatedId;
-      const movStars = this.updateRating.stars;
-      const movieIndex = this.getIndex( movId );
-      this.movies[ movieIndex ].rating = movStars;
+      const movId = this.updateRating.updatedId
+      const movStars = this.updateRating.stars
+      const movieIndex = this.getIndex( movId )
+      this.movies[ movieIndex ].rating = movStars
     }
   },
   mounted() {
     if ( localStorage.getItem( 'movlix-movies' ) ) {
       try {
-        this.movies = JSON.parse( localStorage.getItem( 'movlix-movies' ) );
-        this.succId = parseInt( localStorage.succId );
+        this.movies = JSON.parse( localStorage.getItem( 'movlix-movies' ) )
+        this.succId = parseInt( localStorage.succId )
       } catch ( e ) {
         // console.error("couldn't fetch localStorage");
-        localStorage.removeItem( 'movlix-movies' );
-        localStorage.removeItem( 'succId' );
+        localStorage.removeItem( 'movlix-movies' )
+        localStorage.removeItem( 'succId' )
       }
     } else {
-      this.succId = this.movies.length + 1;
+      this.succId = this.movies.length + 1
     }
     EventBus.$on( 'updateRating', ( updatedRating, movieId ) => {
       this.updateLocalStorage()
@@ -95,9 +97,14 @@ export default {
       }
     } );
   },
+  computed: {
+    showNotification: function() {
+      return this.movies.length === 0 && !this.showForm
+    }
+  },
   methods: {
     removeMovie: function( target ) {
-      this.movies.splice( target.dataIndex, 1 );
+      this.movies.splice( target.dataIndex, 1 )
       this.updateLocalStorage()
     },
     addMovie: function( formMovie ) {
@@ -118,8 +125,8 @@ export default {
         desc: '',
         rating: '',
       }
-      this.succId++;
-      this.toggleForm();
+      this.succId++
+      this.toggleForm()
       this.updateLocalStorage()
     },
     updateMovie: function( editMovie ) {
@@ -164,6 +171,7 @@ export default {
   color: #0c0b0f;
   background-color: hsla(265, 17%, 93%, 1);
   background-image: url('./assets/topography.svg');
+  box-sizing: border-box;
 }
 
 main {
