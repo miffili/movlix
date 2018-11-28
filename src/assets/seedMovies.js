@@ -1,4 +1,12 @@
 const movies = [ {
+    "id": 7,
+    "title": "WALL·E",
+    "year": 2008,
+    "length": 98,
+    "desc": "In the distant future, a small waste-collecting robot inadvertently embarks on a space journey that will ultimately decide the fate of mankind.",
+    "rating": ''
+  },
+  {
     "id": 6,
     "title": "Die Hard",
     "year": 1988,

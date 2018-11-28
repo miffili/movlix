@@ -6,6 +6,7 @@
   />
   <main>
     <p v-if="showNotification">There are no movies in the database yet.</p>
+    <button type="button" name="loadMovies" v-if="showNotification" @click="loadSampleMovies" class="primary">Load Sample Movies</button>
     <MovieForm
       v-if="showForm"
       @addMovie="addMovie"
@@ -35,7 +36,7 @@ import TheFooter from './components/TheFooter.vue'
 import {
   EventBus
 } from './Events.js'
-// import movies from './assets/seedMovies.js'
+import movies from './assets/seedMovies.js'
 
 export default {
   name: 'app',
@@ -47,7 +48,6 @@ export default {
   },
   data() {
     return {
-      // movies: movies,
       movies: [],
       succId: 0,
       newMovie: {
@@ -103,6 +103,10 @@ export default {
     }
   },
   methods: {
+    loadSampleMovies: function(){
+      this.movies = movies
+      this.updateLocalStorage()
+    },
     removeMovie: function( target ) {
       this.movies.splice( target.dataIndex, 1 )
       this.updateLocalStorage()
@@ -175,11 +179,12 @@ export default {
 }
 
 main {
+  margin: 1rem auto 0;
   padding: 0 0.3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 a {
@@ -271,10 +276,6 @@ button.delete:hover {
     min-width: 980px;
     width: 80vw;
     max-width: 1000px;
-    margin: 1rem auto 0;
-    /* flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start; */
   }
 }
 </style>
