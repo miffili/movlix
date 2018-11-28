@@ -156,7 +156,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   margin: 0 auto;
   padding: 0;
-  color: #2c3e50;
+  color: #0c0b0f;
   background-color: hsla(265, 17%, 93%, 1);
   background-image: url('./assets/topography.svg');
 }
@@ -237,7 +237,7 @@ button.delete:hover {
 }
 
 .no-btn {
-  border: 0;
+  border: none;
   background-color: transparent;
   padding: 0;
   margin: 0;

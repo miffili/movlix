@@ -231,7 +231,6 @@ export default {
 <style lang="css" scoped>
 .movie-form {
   width: 100%;
-  /* background-color: rgba(0, 0, 0, 0.1); */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -293,7 +292,7 @@ fieldset span {
   margin-top: 0.5rem;
 }
 span.invalid {
-  color: red;
+  color: hsla(0, 100%, 37%, 0.8);
 }
 input, textarea {
   font-family: inherit;
@@ -312,7 +311,7 @@ textarea {
   resize: vertical;
 }
 input.invalid, textarea.invalid {
-  border: 2px solid rgba(220, 70, 70, 1);
+  border: 2px solid hsla(0, 100%, 31%, 0.8);
 }
 .edit-movie fieldset {
   padding-bottom: 0;

@@ -186,7 +186,7 @@ export default {
     position: relative;
     margin-bottom: 0.8rem;
     padding: 1rem 2rem 1.5rem;
-    background-color: hsla(265, 100%, 99.5%, 1);
+    background-color: hsla(265, 100%, 99.8%, 1);
     box-shadow: 0 0.05rem 0.1rem 0 hsla(0, 0%, 0%, 0.1);
     box-sizing: border-box;
     border-radius: 4px;
@@ -278,6 +278,6 @@ export default {
   }
   .edit-info .invalid {
     font-size: 0.85rem;
-    color: red;
+    color: hsla(0, 100%, 37%, 0.8);
   }
 </style>
