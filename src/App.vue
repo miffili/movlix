@@ -134,7 +134,6 @@ export default {
     },
     updateMovie: function( editMovie ) {
       const movieIndex = this.getIndex( editMovie.id );
-      // console.log( id, this.movies[ id ] );
       if ( editMovie.title !== this.movies[ movieIndex ].title ) {
         this.movies[ movieIndex ].title = editMovie.title;
       }
