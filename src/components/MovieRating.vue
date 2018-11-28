@@ -27,6 +27,7 @@ import {
 } from '../Events.js'
 
 export default {
+  name: "MovieRating",
   props: {
     grade: Number,
     movieId: [ Number, String ]
@@ -135,6 +136,7 @@ export default {
     padding-left: 0.75rem;
     text-transform: uppercase;
     font-size: 0.8rem;
+    cursor: pointer;
   }
   .not-rated svg {
     width: 1rem;

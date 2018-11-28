@@ -25,7 +25,7 @@
         class="toggle"
         @click="toggle('openMenu')"
         :class="{'toggle-open': openMenu}"
-        title="open menu"
+        :title="openMenu? 'close menu' : 'open menu'"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -99,6 +99,7 @@ import MovieRating from './MovieRating.vue'
 import MovieForm from './MovieForm.vue'
 
 export default {
+  name: "MovieCard",
   components: {
     MovieRating,
     MovieForm
@@ -177,17 +178,18 @@ export default {
 
 <style lang="css" scoped>
   .movie-card {
-    box-sizing: border-box;
+    width: 100%;
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     padding: 1rem 2rem 1.5rem;
-    background-color: hsla(265, 100%, 99.5%, 1);
+    background-color: hsla(265, 100%, 99.2%, 1);
     box-shadow: 0 0.05rem 0.1rem 0 hsla(0, 0%, 0%, 0.1);
-    border-radius: 5px;
+    box-sizing: border-box;
+    border-radius: 4px;
   }
   .movie-card:hover {
-    box-shadow: .35rem .35rem 0.3rem 0 hsla(0, 0%, 0%, 0.05);
-    transform: scale(1.01);
+    box-shadow: .25rem .25rem 0.4rem 0 hsla(0, 0%, 0%, 0.05);
+    transform: translateY(-1px) scale(1.01);
   }
   .display-info {
     display: flex;
@@ -205,13 +207,13 @@ export default {
   }
   .card-head .title {
     padding-right: 1rem;
-    font-size: 1.3rem;
     margin-bottom: 0;
   }
   .card-head .year {
     font-size: 1rem;
     font-weight: 400;
     opacity: 0.7;
+    color: black;
   }
   .card-desc {
     width: 100%;
@@ -264,20 +266,16 @@ export default {
     bottom: 0;
     left: 0;
     padding: 1rem 2rem;
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(0, 0, 0, 0.035);
     box-sizing: border-box;
   }
   .card-functions button:first-child {
     margin-right: 0.5rem;
   }
-  .delete {
-    border: 1px solid hsla(0, 100%, 31%, 0.8);
-    color: hsla(0, 100%, 31%, 0.8);
-  }
   .edit-info {
     width: 100%;
     margin-bottom: 0.5rem;
-    padding-bottom: 4rem;
+    padding-bottom: 3.375rem;
   }
   .edit-info .invalid {
     font-size: 0.85rem;

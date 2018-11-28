@@ -210,10 +210,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: hsla(265, 100%, 99.2%, 0.7);
+  /* background: linear-gradient(180deg, hsla(265, 100%, 95%, 1) 5%, hsla(265, 100%, 99.2%, 0.45) 30%, hsla(265, 100%, 99.2%, 0.45) 100%); */
 }
 .movie-form.adding {
   padding: 1rem 2rem;
-  border-radius: 5px;
+  border-radius: 4px;
   /* box-shadow: 0 0 0.2rem 0 rgba(0, 0, 0, 0.2); */
   border: 2px solid hsla(265, 100%, 31%, 0.75);
   margin-bottom: 2rem;
@@ -271,11 +273,14 @@ input, textarea {
   font-family: inherit;
   font-size: 0.9rem;
   border: 2px solid transparent;
-  border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  background-color: hsla(265, 10%, 87%, 0.6);
   margin: 0.2rem auto 0.1rem;
   box-sizing: border-box;
   padding: 0.3rem;
+}
+input::placeholder, textarea::placeholder {
+  color: hsla(265, 10%, 68%, 1);
 }
 textarea {
   resize: vertical;
