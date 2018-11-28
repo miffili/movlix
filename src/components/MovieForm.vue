@@ -27,7 +27,7 @@
   </fieldset>
   <div class="movie-numbers">
     <fieldset>
-      <label for="year">Year <span class="required">*</span></label>
+      <label for="year">Year of Release <span class="required">*</span></label>
       <input
         type="number"
         name="year"
@@ -85,10 +85,8 @@
   <div v-if="type==='addMovie'" class="form-footer">
     <span v-if="invalidInput" class="invalid" >Please correct the errors.</span>
     <span v-else class="info" >* required fields</span>
-    <!-- <div class="buttons"> -->
-      <button type="button" name="button" v-on:click="$emit('cancel')" class="secondary">Cancel</button>
-      <button type="button" name="button" v-on:click="validateBeforeSubmit('addMovie')" class="primary">Save</button>
-    <!-- </div> -->
+      <button type="button" name="button" @:click="$emit('cancel')" class="secondary">Cancel</button>
+      <button type="button" name="button" @:click="validateBeforeSubmit('addMovie')" :disabled="invalidInput" class="primary">Save</button>
   </div>
 </form>
 
@@ -96,7 +94,6 @@
 
 <form
   v-else-if="type==='editMovie'"
-  v-on:submit.prevent="validateBeforeSubmit"
   class="movie-form edit-movie"
 >
   <div class="card-head">
@@ -104,7 +101,7 @@
       <input
         type="text"
         name="title"
-        placeholder="Title"
+        placeholder="Title *"
         v-focus
         v-model="formMovie.title"
         v-validate="'required'"
@@ -122,7 +119,7 @@
       <input
         type="number"
         name="year"
-        placeholder="Year"
+        placeholder="Year of Release *"
         min="1988"
         v-model="formMovie.year"
         v-validate="'required|max_value:2030'"
@@ -205,13 +202,13 @@ export default {
     }
   },
   updated() {
+    if ( this.errors.items.length > 0 ) this.invalidInput = true;
+    if ( this.errors.items.length === 0 && this.invalidInput === true ) {
+      this.invalidInput = false
+    }
     if ( this.type === "editMovie" ) {
       const enableSaving = ( this.errors.items.length === 0 );
-      this.$emit( 'dataEdit', this.formMovie, enableSaving );
-    } else {
-      if ( this.errors.items.length === 0 && this.invalidInput === true ) {
-        this.invalidInput = false
-      }
+      this.$emit( 'dataEdit', this.formMovie, enableSaving, this.invalidInput );
     }
   },
   methods: {

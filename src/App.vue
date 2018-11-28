@@ -254,6 +254,10 @@ button.delete:hover {
   font-weight: 600;
 }
 
+button:disabled {
+  opacity: 0.6;
+}
+
 .no-btn {
   border: none;
   background-color: transparent;

@@ -144,17 +144,19 @@ export default {
       return parseInt( this.movieData.rating )
     },
     invalidForm: function() {
-      return ( this.invalidInput && !this.disableSave )
+      // disable true, when invalidInput true && enableSaving false
+      return this.invalidInput === true && this.enableSaving === false
     }
   },
   methods: {
     toggle: function( el ) {
       this[ el ] = !this[ el ]
     },
-    reflectEdit: function( formMovie, enableSaving ) {
+    reflectEdit: function( formMovie, enableSaving, invalidInput ) {
+      this.invalidInput = invalidInput
       if ( enableSaving !== this.enableSaving ) {
         this.enableSaving = enableSaving;
-        this.invalidInput = false;
+        // this.invalidInput = false;
       }
       if ( formMovie.title !== this.editMovie.title ) this.editMovie.title = formMovie.title;
       if ( formMovie.year !== this.editMovie.year ) this.editMovie.year = formMovie.year;
