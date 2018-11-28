@@ -217,4 +217,14 @@ button.delete:hover {
   color: hsla(265, 10%, 94%, 1);
   font-weight: 600;
 }
+.no-btn {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+}
+.no-btn:hover {
+  box-shadow: none;
+  transform: none;
+}
 </style>

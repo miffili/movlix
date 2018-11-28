@@ -69,6 +69,7 @@ export default {
     display: flex;
     align-items: center;
     height: 1.2rem;
+    padding: 0 0.5rem;
   }
   .list {
     list-style-type: none;
@@ -90,9 +91,10 @@ export default {
     font-size: 1rem;
     letter-spacing: 0.08rem;
     opacity: 0;
+    color: hsla(0, 0%, 32%, 0.8)
   }
   .ofMax {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
   .star {
     cursor: pointer;
@@ -133,19 +135,24 @@ export default {
     height: 1.2rem;
     align-items: flex-start;
     cursor: default;
-    padding-left: 0.75rem;
+    padding-left: 0.75rem !important;
     text-transform: uppercase;
     font-size: 0.8rem;
     cursor: pointer;
+    opacity: 0.8;
+  }
+  .not-rated:hover {
+    opacity: 1;
   }
   .not-rated svg {
     width: 1rem;
     height: 1rem;
-    fill: goldenrod;
     margin-right: 0.15rem;
-    opacity: 0.5;
+    stroke: hsla(46, 65%, 50%, 1);
+    fill: hsla(46, 92%, 64%, 1);
   }
   .cta {
     align-self: center;
+    color: hsla(0, 0%, 32%, 0.95)
   }
 </style>

@@ -16,13 +16,18 @@
       <p v-else><em>Description not provided</em></p>
     </div>
     <div class="card-details">
-      <span v-if="movieData.length" class="length">{{ prettyLength }}</span>
+      <span
+        v-if="movieData.length"
+        class="length"
+      >{{ prettyLength }}</span>
       <MovieRating
         :grade="ratingInNumber"
         :movieId="this.movieData.id"
       />
-      <div
-        class="toggle"
+      <button
+        type = "button"
+        :name = "openMenu? 'close menu' : 'open menu'"
+        class="toggle no-btn"
         @click="toggle('openMenu')"
         :class="{'toggle-open': openMenu}"
         :title="openMenu? 'close menu' : 'open menu'"
@@ -40,7 +45,7 @@
             stroke-linecap="round"
           />
         </svg>
-      </div>
+      </button>
     </div>
   </div>
   <div
@@ -144,8 +149,8 @@ export default {
     }
   },
   methods: {
-    toggle: function(el) {
-      this[el] = !this[el]
+    toggle: function( el ) {
+      this[ el ] = !this[ el ]
     },
     reflectChanges: function( emittedData, enableSaving ) {
       if ( enableSaving !== this.enableSaving ) {
@@ -158,7 +163,7 @@ export default {
       if ( emittedData.length !== this.editedMovie.length ) this.editedMovie.length = emittedData.length;
     },
     cancelEdit: function() {
-      this.toggle('editOpen');
+      this.toggle( 'editOpen' );
       this.editedMovie.title = this.movieData.title;
       this.editedMovie.year = this.movieData.year;
       this.editedMovie.length = this.movieData.length;
@@ -166,7 +171,7 @@ export default {
     },
     saveChanges: function() {
       if ( this.enableSaving ) {
-        this.toggle('editOpen');
+        this.toggle( 'editOpen' );
         this.$emit( 'save', this.movieData.id, this.editedMovie );
       } else {
         this.invalidInput = true;
@@ -182,7 +187,7 @@ export default {
     position: relative;
     margin-bottom: 0.8rem;
     padding: 1rem 2rem 1.5rem;
-    background-color: hsla(265, 100%, 99.2%, 1);
+    background-color: hsla(265, 100%, 99.5%, 1);
     box-shadow: 0 0.05rem 0.1rem 0 hsla(0, 0%, 0%, 0.1);
     box-sizing: border-box;
     border-radius: 4px;
@@ -206,14 +211,13 @@ export default {
     align-items: baseline;
   }
   .card-head .title {
-    padding-right: 1rem;
     margin-bottom: 0;
   }
   .card-head .year {
+    padding-left: 0.3rem;
     font-size: 1rem;
     font-weight: 400;
-    opacity: 0.7;
-    color: black;
+    color: hsla(0, 0%, 32%, 0.8);
   }
   .card-desc {
     width: 100%;
@@ -227,16 +231,11 @@ export default {
     align-items: center;
     position: relative;
   }
-  .card-details > * {
-    padding: 0 0.5rem;
-    border-left: 2px solid hsla(0, 0%, 0%, 0.4);
-  }
-  .card-details>*:first-child {
-    padding-left: 0;
-    border-left: none;
-  }
   .length {
-    font-size: 0.9rem;;
+    padding-right: 0.75rem;
+    font-size: 0.9rem;
+    color: hsla(0, 0%, 32%, 0.8);
+    border-right: 2px solid hsla(0, 0%, 32%, 0.8);
   }
   .toggle {
     width: 1rem;
@@ -249,6 +248,7 @@ export default {
     border: none;
     right: 0;
     transition: transform 0.3s;
+    cursor: pointer;
   }
   .open .toggle-open {
     transform: scaleY(-1);
@@ -256,7 +256,7 @@ export default {
   .toggle svg {
     width: 100%;
     height: 100%;
-    stroke: black;
+    stroke: hsla(0, 0%, 32%, 0.8);
   }
   .card-functions {
     width: 100%;
