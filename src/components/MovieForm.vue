@@ -1,5 +1,4 @@
 <template>
-<!-- ADD MOVIE -->
 <form
   v-if="type==='addMovie'"
   :key="'newMovie'"
@@ -19,11 +18,9 @@
       data-vv-scope="addMovie"
       :class="{ 'invalid': errors.has('addMovie.title')}"
     >
-    <span
-      v-if="errors.has('addMovie.title')"
-      class="invalid"
-    >{{ errors.first('addMovie.title') }}</span>
-    <!-- <span>{{ this.fields.$addMovie.title }}</span> -->
+    <span v-if="errors.has('addMovie.title')" class="invalid">
+      {{ errors.first('addMovie.title') }}
+    </span>
   </fieldset>
   <div class="movie-numbers">
     <fieldset>
@@ -38,10 +35,7 @@
         data-vv-scope="addMovie"
         :class="{ 'invalid': errors.has('addMovie.year')}"
       >
-      <span
-        v-if="errors.has('addMovie.year')"
-        class="invalid"
-      >
+      <span v-if="errors.has('addMovie.year')" class="invalid">
         {{ errors.first('addMovie.year') }}
       </span>
     </fieldset>
@@ -56,10 +50,7 @@
         data-vv-scope="addMovie"
         :class="{ 'invalid': errors.has('addMovie.length')}"
       >
-      <span
-        v-if="errors.has('addMovie.length')"
-        class="invalid"
-      >
+      <span v-if="errors.has('addMovie.length')" class="invalid">
         {{ errors.first('addMovie.length') }}
       </span>
     </fieldset>
@@ -75,10 +66,7 @@
       data-vv-scope="addMovie"
       :class="{ 'invalid': errors.has('addMovie.desc') }"
     />
-    <span
-      v-if="errors.has('addMovie.desc')"
-      class="invalid"
-    >
+    <span v-if="errors.has('addMovie.desc')" class="invalid">
       {{ errors.first('addMovie.desc') }}
     </span>
   </fieldset>
@@ -90,7 +78,6 @@
   </div>
 </form>
 
-<!-- EDIT MOVIE FORM TEMPLATE-->
 
 <form
   v-else-if="type==='editMovie'"
@@ -108,10 +95,7 @@
         :data-vv-scope="`edit${movieData.id}`"
         :class="{ 'invalid': errors.has(`edit${movieData.id}.title`)}"
       >
-      <span
-        v-if="errors.has(`edit${movieData.id}.title`)"
-        class="invalid"
-      >
+      <span v-if="errors.has(`edit${movieData.id}.title`)" class="invalid">
         {{ errors.first(`edit${movieData.id}.title`) }}
       </span>
     </fieldset>
@@ -127,10 +111,7 @@
         :data-vv-scope="`edit${movieData.id}`"
         :class="{'invalid': errors.has(`edit${movieData.id}.year`)}"
       >
-      <span
-        v-if="errors.has(`edit${movieData.id}.year`)"
-        class="invalid"
-      >
+      <span v-if="errors.has(`edit${movieData.id}.year`)" class="invalid">
         {{ errors.first(`edit${movieData.id}.year`) }}
       </span>
     </fieldset>
@@ -146,7 +127,9 @@
         :data-vv-scope="`edit${movieData.id}`"
         :class="{ 'invalid': errors.has(`edit${movieData.id}.desc`) }"
       />
-      <span v-if="errors.has(`edit${movieData.id}.desc`)" class="invalid" >{{ errors.first(`edit${movieData.id}.desc`) }}</span>
+      <span v-if="errors.has(`edit${movieData.id}.desc`)" class="invalid">
+        {{ errors.first(`edit${movieData.id}.desc`) }}
+      </span>
     </fieldset>
   </div>
   <div class="card-details">
@@ -161,10 +144,9 @@
         :data-vv-scope="`edit${movieData.id}`"
         :class="{ 'invalid': errors.has(`edit${movieData.id}.length`) }"
       >
-      <span
-        v-if="errors.has(`edit${movieData.id}.length`)"
-        class="invalid"
-      >{{ errors.first(`edit${movieData.id}.length`) }}</span>
+      <span v-if="errors.has(`edit${movieData.id}.length`)" class="invalid">
+        {{ errors.first(`edit${movieData.id}.length`) }}
+      </span>
     </fieldset>
   </div>
 </form>
@@ -308,8 +290,6 @@ textarea {
 input.invalid, textarea.invalid {
   border: 2px solid hsla(0, 100%, 31%, 0.8);
 }
-
-/* EDIT FORM */
 .edit-movie fieldset {
   padding-bottom: 0;
 }

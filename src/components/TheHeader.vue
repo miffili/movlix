@@ -54,6 +54,7 @@ export default {
     right: 0;
     background-color: hsla(0, 100%, 100%, 0.6);
   }
+  
   @media (min-width: 576px) {
     header {
       flex-direction: row;

@@ -77,7 +77,7 @@ export default {
     margin: 0;
     position: relative;
   }
-  /* when hovering over rating (all stars up til cursor) */
+  /* when hovering over rating (all stars up 'til cursor) */
   .list:hover .star svg {
     stroke: hsla(46, 65%, 50%, 1);
     fill: hsla(46, 92%, 64%, 0.5);
@@ -113,22 +113,21 @@ export default {
     stroke: hsla(0, 0%, 32%, 0.5);
     fill: hsla(0, 0%, 32%, 0.3);
   }
-  /* when hovering over rating all after cursor */
+  /* when hovering over rating (all stars after cursor) */
   .star:hover ~ .star:not(.active) svg{
     stroke: hsla(0, 0%, 32%, 0.5);
     fill: hsla(0, 0%, 32%, 0.3);
   }
-  /* when rated all chosen */
+  /* when rated (all stars up 'til rating') */
   .active svg {
     stroke: hsla(46, 65%, 50%, 1);
     fill: hsla(46, 92%, 64%, 1);
   }
-  /* when rated all none chosen */
+  /* when rated (all none chosen stars) */
   .star:not(.active) svg {
     stroke: hsla(0, 0%, 32%, 0.5);
     fill: hsla(0, 0%, 32%, 0.5);
   }
-  /* RATE CTA */
   .not-rated {
     display: flex;
     height: 1.2rem;

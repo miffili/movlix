@@ -16,29 +16,22 @@
       <p v-else><em>Description not provided</em></p>
     </div>
     <div class="card-details">
-      <span
-        v-if="movieData.length"
-        class="length"
-      >{{ prettyLength }}</span>
+      <span v-if="movieData.length" class="length">
+        {{ prettyLength }}
+      </span>
       <MovieRating
         :grade="ratingInNumber"
         :movieId="this.movieData.id"
       />
       <button
-        type = "button"
-        :name = "openMenu? 'close menu' : 'open menu'"
+        type="button"
+        :name="openMenu? 'close menu' : 'open menu'"
         class="toggle no-btn"
         @click="toggle('openMenu')"
         :class="{'toggle-open': openMenu}"
         :title="openMenu? 'close menu' : 'open menu'"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="81"
-          height="81"
-          viewBox="0 0 81 81"
-          fill="none"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" width="81" height="81" viewBox="0 0 81 81" fill="none">
           <path
             d="M3 20L38.2863 58.5797C39.4757 59.88 41.5243 59.88 42.7137 58.5797L78 20"
             stroke-width="8"
@@ -48,24 +41,17 @@
       </button>
     </div>
   </div>
-  <div
-    v-else
-    class="edit-info"
-  >
+  <div v-else class="edit-info">
     <MovieForm
       :movieData="editMovie"
       :type="'editMovie'"
       @dataEdit="reflectEdit"
     />
-    <span
-      class="invalid"
-      v-if="invalidForm"
-    >Please correct the marked fields.</span>
+    <span class="invalid" v-if="invalidForm">
+      Please correct the marked fields.
+    </span>
   </div>
-  <div
-    class="card-functions"
-    v-if="openMenu"
-  >
+  <div v-if="openMenu" class="card-functions">
     <button
       type="button"
       name="remove"
@@ -144,7 +130,6 @@ export default {
       return parseInt( this.movieData.rating )
     },
     invalidForm: function() {
-      // disable true, when invalidInput true && enableSaving false
       return this.invalidInput === true && this.enableSaving === false
     }
   },
@@ -156,7 +141,6 @@ export default {
       this.invalidInput = invalidInput
       if ( enableSaving !== this.enableSaving ) {
         this.enableSaving = enableSaving;
-        // this.invalidInput = false;
       }
       if ( formMovie.title !== this.editMovie.title ) this.editMovie.title = formMovie.title;
       if ( formMovie.year !== this.editMovie.year ) this.editMovie.year = formMovie.year;
@@ -290,6 +274,7 @@ export default {
     font-size: 0.85rem;
     color: hsla(0, 100%, 37%, 0.8);
   }
+
   @media (min-width: 450px) {
     .open {
       padding-bottom: 4rem;
@@ -301,6 +286,7 @@ export default {
       width: auto;
     }
   }
+  
   @media (min-width: 576px) {
     .movie-card {
       max-width: 800px;
