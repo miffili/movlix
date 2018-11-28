@@ -71,16 +71,17 @@
     </span>
   </fieldset>
   <div v-if="type==='addMovie'" class="form-footer">
-    <span v-if="invalidInput" class="invalid" >Please correct the errors.</span>
+    <span v-if="invalidAddInput" class="invalid" >Please correct the errors.</span>
     <span v-else class="info" >* required fields</span>
-      <button type="button" name="button" @:click="$emit('cancel')" class="secondary">Cancel</button>
-      <button type="button" name="button" @:click="validateBeforeSubmit('addMovie')" :disabled="invalidInput" class="primary">Save</button>
+    <button type="button" name="button" @click="$emit('toggleForm')" class="secondary">Cancel</button>
+    <button type="button" name="button" @click="validateBeforeSubmit('addMovie')" :disabled="invalidAddInput" class="primary">Save</button>
   </div>
 </form>
 
 
 <form
   v-else-if="type==='editMovie'"
+  :key="`edit${movieData.id}`"
   class="movie-form edit-movie"
 >
   <div class="card-head">
@@ -180,17 +181,22 @@ export default {
         length: this.movieData.length,
         desc: this.movieData.desc,
       },
-      invalidInput: false
+      invalidAddInput: false,
+      invalidEditInput: false
     }
   },
   updated() {
-    if ( this.errors.items.length > 0 ) this.invalidInput = true;
-    if ( this.errors.items.length === 0 && this.invalidInput === true ) {
-      this.invalidInput = false
+    if ( this.errors.items.length === 0 && this.invalidAddInput === true ) {
+      this.invalidAddInput = false
     }
     if ( this.type === "editMovie" ) {
-      const enableSaving = ( this.errors.items.length === 0 );
-      this.$emit( 'dataEdit', this.formMovie, enableSaving, this.invalidInput );
+      const editErrors = this.errors.items.findIndex( (el)=> (el.scope.includes('edit')) )
+      if ( editErrors >= 0) {
+        this.invalidEditInput = true;
+      } else if (editErrors < 0) {
+        this.invalidEditInput = false;
+      }
+      this.$emit( 'dataEdit', this.formMovie, this.invalidEditInput );
     }
   },
   methods: {
@@ -201,7 +207,7 @@ export default {
             this.emitMovie();
             return;
           }
-          this.invalidInput = true;
+          this.invalidAddInput = true;
         } );
     },
     emitMovie() {
@@ -218,13 +224,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: hsla(265, 100%, 99.2%, 0.7);
 }
 .movie-form.adding {
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: 2px solid hsla(265, 100%, 31%, 0.75);
   margin-bottom: 1rem;
+  background-color: hsla(265, 100%, 99.2%, 0.7);
 }
 fieldset {
   border: none;
@@ -280,6 +286,7 @@ input, textarea {
   margin: 0.2rem auto 0.1rem;
   box-sizing: border-box;
   padding: 0.2rem;
+  color: inherit
 }
 input::placeholder, textarea::placeholder {
   color: hsla(265, 10%, 68%, 1);
@@ -306,6 +313,8 @@ input.invalid, textarea.invalid {
   }
   .form-footer span {
     position: absolute;
+    left: 0;
+    width: auto;
     padding-top: 0.2rem;
   }
   button {

@@ -13,7 +13,7 @@
     <MovieForm
       v-if="showForm"
       @addMovie="addMovie"
-      @cancel="toggleForm"
+      @toggleForm="toggleForm"
       :movieData="newMovie"
       :type="'addMovie'"
     />
@@ -85,7 +85,6 @@ export default {
         this.movies = JSON.parse( localStorage.getItem( 'movlix-movies' ) )
         this.succId = parseInt( localStorage.succId )
       } catch ( e ) {
-        // console.error("couldn't fetch localStorage");
         localStorage.removeItem( 'movlix-movies' )
         localStorage.removeItem( 'succId' )
       }
@@ -109,6 +108,7 @@ export default {
     loadSampleMovies: function() {
       this.movies = movies
       this.updateLocalStorage()
+      this.succId = movies.length + 1
     },
     addMovie: function( formMovie ) {
       const createMovie = {

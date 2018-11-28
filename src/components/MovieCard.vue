@@ -47,7 +47,7 @@
       :type="'editMovie'"
       @dataEdit="reflectEdit"
     />
-    <span class="invalid" v-if="invalidForm">
+    <span class="invalid" v-if="invalidEditInput">
       Please correct the marked fields.
     </span>
   </div>
@@ -77,7 +77,7 @@
         name="save"
         class="primary"
         @click="saveChanges"
-        :disabled="invalidForm"
+        :disabled="invalidEditInput"
       >Save</button>
     </div>
   </div>
@@ -115,8 +115,7 @@ export default {
         length: this.movieData.length,
         desc: this.movieData.desc,
       },
-      enableSaving: true,
-      invalidInput: false
+      invalidEditInput: false
     }
   },
   computed: {
@@ -129,19 +128,13 @@ export default {
     ratingInNumber: function() {
       return parseInt( this.movieData.rating )
     },
-    invalidForm: function() {
-      return this.invalidInput === true && this.enableSaving === false
-    }
   },
   methods: {
     toggle: function( el ) {
       this[ el ] = !this[ el ]
     },
-    reflectEdit: function( formMovie, enableSaving, invalidInput ) {
-      this.invalidInput = invalidInput
-      if ( enableSaving !== this.enableSaving ) {
-        this.enableSaving = enableSaving;
-      }
+    reflectEdit: function( formMovie, invalidEditInput ) {
+      this.invalidEditInput = invalidEditInput
       if ( formMovie.title !== this.editMovie.title ) this.editMovie.title = formMovie.title;
       if ( formMovie.year !== this.editMovie.year ) this.editMovie.year = formMovie.year;
       if ( formMovie.desc !== this.editMovie.desc ) this.editMovie.desc = formMovie.desc;
@@ -155,11 +148,9 @@ export default {
       this.editMovie.desc = this.movieData.desc;
     },
     saveChanges: function() {
-      if ( this.enableSaving ) {
+      if ( !this.invalidEditInput ) {
         this.toggle( 'openForm' );
         this.$emit( 'save', this.editMovie );
-      } else {
-        this.invalidInput = true;
       }
     }
   },
@@ -273,6 +264,8 @@ export default {
   .edit-info .invalid {
     font-size: 0.85rem;
     color: hsla(0, 100%, 37%, 0.8);
+    display: inline-block;
+    margin-top: 0.5rem;
   }
 
   @media (min-width: 450px) {
@@ -286,7 +279,7 @@ export default {
       width: auto;
     }
   }
-  
+
   @media (min-width: 576px) {
     .movie-card {
       max-width: 800px;
@@ -301,7 +294,7 @@ export default {
       width: auto;
     }
     .edit-info {
-      padding-bottom: 3.375rem;
+      padding-bottom: 4rem;
     }
     .edit-buttons button:first-child {
       margin-right: 0.5rem;
