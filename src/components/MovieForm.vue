@@ -82,15 +82,17 @@
       {{ errors.first('addMovie.desc') }}
     </span>
   </fieldset>
-  <div v-if="type==='addMovie'" class="buttons">
+  <div v-if="type==='addMovie'" class="form-footer">
     <span v-if="invalidInput" class="invalid" >Please correct the errors.</span>
     <span v-else class="info" >* required fields</span>
-    <button type="button" name="button" v-on:click="$emit('cancel')" class="secondary">Cancel</button>
-    <button type="button" name="button" v-on:click="validateBeforeSubmit('addMovie')" class="primary">Save</button>
+    <!-- <div class="buttons"> -->
+      <button type="button" name="button" v-on:click="$emit('cancel')" class="secondary">Cancel</button>
+      <button type="button" name="button" v-on:click="validateBeforeSubmit('addMovie')" class="primary">Save</button>
+    <!-- </div> -->
   </div>
 </form>
 
-<!-- EDIT MOVIE -->
+<!-- EDIT MOVIE FORM TEMPLATE-->
 
 <form
   v-else-if="type==='editMovie'"
@@ -238,14 +240,12 @@ export default {
   flex-direction: column;
   align-items: center;
   background-color: hsla(265, 100%, 99.2%, 0.7);
-  /* background: linear-gradient(180deg, hsla(265, 100%, 95%, 1) 5%, hsla(265, 100%, 99.2%, 0.45) 30%, hsla(265, 100%, 99.2%, 0.45) 100%); */
 }
 .movie-form.adding {
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
-  /* box-shadow: 0 0 0.2rem 0 rgba(0, 0, 0, 0.2); */
   border: 2px solid hsla(265, 100%, 31%, 0.75);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 fieldset {
   border: none;
@@ -257,21 +257,20 @@ fieldset {
 * {
   width: 100%;
 }
-.buttons {
+.form-footer {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   justify-content: flex-end;
   position: relative;
   margin-top: 0.5rem;
 }
-.buttons span {
-  position: absolute;
-  padding-top: 0.2rem;
+.form-footer span {
+  margin-bottom: 0.2rem;
 }
 button {
-  width: auto;
-  margin: 0 0.5rem;
+  width: 100%;
+  margin-top: 0.4rem;
 }
 button:first-child {
   margin-left: 0;
@@ -282,10 +281,7 @@ button:last-child {
 .movie-numbers {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-}
-.movie-numbers fieldset {
-  width: 48%;
+  flex-direction: column;
 }
 span {
   font-size: 0.85rem;
@@ -315,19 +311,48 @@ textarea {
 input.invalid, textarea.invalid {
   border: 2px solid hsla(0, 100%, 31%, 0.8);
 }
+
+/* EDIT FORM */
 .edit-movie fieldset {
   padding-bottom: 0;
 }
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  width: 100%;
-}
-.card-head fieldset {
-  width: 48%;
-}
-.card-details fieldset {
-  width: 48%;
+
+@media (min-width: 576px) {
+  .movie-form.adding {
+    max-width: 800px;
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+  }
+  .form-footer {
+    flex-direction: row;
+    align-items: center;
+  }
+  .form-footer span {
+    position: absolute;
+    padding-top: 0.2rem;
+  }
+  button {
+    width: auto;
+    margin: 0 0.5rem;
+  }
+  .movie-numbers {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .movie-numbers fieldset {
+    width: 48%;
+  }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+  }
+  .card-head fieldset {
+    width: 48%;
+  }
+  .card-details fieldset {
+    width: 48%;
+  }
 }
 </style>

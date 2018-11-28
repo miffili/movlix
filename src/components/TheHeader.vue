@@ -28,9 +28,8 @@ export default {
   header {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 1.75rem 2rem;
+    flex-direction: column;
+    padding: 1.75rem 0.5rem;
     color: white;
     font-size: 2rem;
     font-weight: lighter;
@@ -38,13 +37,13 @@ export default {
     box-sizing: border-box;
   }
   .logo {
-    height: 40px;
+    height: 3rem;
     opacity: 0.85;
-    transform: translateY(0.2rem);
-    position: relative;
+    align-self: flex-start;
   }
   .underline {
     position: relative;
+    align-self: flex-end;
   }
   .underline::after {
     content: '';
@@ -54,6 +53,23 @@ export default {
     position: absolute;
     right: 0;
     background-color: hsla(0, 100%, 100%, 0.6);
+  }
+  @media (min-width: 576px) {
+    header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1.75rem 2rem;
+    }
+    .logo {
+      width: auto;
+      height: 40px;
+      transform: translateY(0.2rem);
+      align-self: auto;
+    }
+    .underline {
+      align-self: auto;
+    }
   }
   .addMovie {
     font-size: 1.1rem;

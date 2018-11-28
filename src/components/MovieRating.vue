@@ -69,11 +69,10 @@ export default {
     display: flex;
     align-items: center;
     height: 1.2rem;
-    padding: 0 0.5rem;
   }
   .list {
     list-style-type: none;
-    padding: 0 0.25rem;
+    padding: 0;
     display: flex;
     margin: 0;
     position: relative;
@@ -135,7 +134,6 @@ export default {
     height: 1.2rem;
     align-items: flex-start;
     cursor: default;
-    padding-left: 0.75rem !important;
     text-transform: uppercase;
     font-size: 0.8rem;
     cursor: pointer;

@@ -154,6 +154,7 @@ export default {
   font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0;
   color: #0c0b0f;
@@ -162,11 +163,11 @@ export default {
 }
 
 main {
-  width: 60vw;
-  margin: 1rem auto 0;
+  padding: 0 0.3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
 }
 
 a {
@@ -246,5 +247,22 @@ button.delete:hover {
 .no-btn:hover {
   box-shadow: none;
   transform: none;
+}
+@media (min-width: 576px) {
+  main {
+    width: 570px;
+    margin: 1rem auto 0;
+  }
+}
+@media (min-width: 992px) {
+  main {
+    min-width: 980px;
+    width: 80vw;
+    max-width: 1000px;
+    margin: 1rem auto 0;
+    /* flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start; */
+  }
 }
 </style>

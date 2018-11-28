@@ -79,7 +79,7 @@
       @click="toggle('openForm')"
       v-if="!openForm"
     >Edit</button>
-    <div v-else>
+    <div v-else class="edit-buttons">
       <button
         type="button"
         name="cancel"
@@ -183,6 +183,7 @@ export default {
 <style lang="css" scoped>
   .movie-card {
     width: 100%;
+    max-width: 800px;
     position: relative;
     margin-bottom: 0.8rem;
     padding: 1rem 2rem 1.5rem;
@@ -202,7 +203,7 @@ export default {
     padding-bottom: 0rem;
   }
   .open {
-    padding-bottom: 4rem;
+    padding-bottom: 6rem;
   }
   .card-head {
     width: 100%;
@@ -219,6 +220,7 @@ export default {
     color: hsla(0, 0%, 32%, 0.8);
   }
   .card-desc {
+    flex-grow: 1;
     width: 100%;
   }
   .card-desc p {
@@ -232,6 +234,7 @@ export default {
   }
   .length {
     padding-right: 0.75rem;
+    margin-right: 0.75rem;
     font-size: 0.9rem;
     color: hsla(0, 0%, 32%, 0.8);
     border-right: 2px solid hsla(0, 0%, 32%, 0.8);
@@ -260,6 +263,7 @@ export default {
   .card-functions {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     position: absolute;
     bottom: 0;
@@ -268,16 +272,51 @@ export default {
     background-color: rgba(0, 0, 0, 0.035);
     box-sizing: border-box;
   }
-  .card-functions button:first-child {
-    margin-right: 0.5rem;
+  .card-functions button{
+    width: 100%;
+    margin-top: 0.4rem;
+  }
+  button.delete {
+    margin-top: 0;
   }
   .edit-info {
     width: 100%;
     margin-bottom: 0.5rem;
-    padding-bottom: 3.375rem;
+    padding-bottom: 8rem;
   }
   .edit-info .invalid {
     font-size: 0.85rem;
     color: hsla(0, 100%, 37%, 0.8);
+  }
+  @media (min-width: 450px) {
+    .open {
+      padding-bottom: 4rem;
+    }
+    .display-info ~ .card-functions {
+      flex-direction: row;
+    }
+    .display-info ~ .card-functions button{
+      width: auto;
+    }
+  }
+  @media (min-width: 576px) {
+    .movie-card {
+      max-width: 800px;
+    }
+    .open {
+      padding-bottom: 4rem;
+    }
+    .card-functions {
+      flex-direction: row;
+    }
+    .card-functions button{
+      width: auto;
+    }
+    .edit-info {
+      padding-bottom: 3.375rem;
+    }
+    .edit-buttons button:first-child {
+      margin-right: 0.5rem;
+    }
   }
 </style>
