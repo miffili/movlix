@@ -1,7 +1,7 @@
 <template>
 <div class="movie-card">
   <div
-    v-if="!editOpen"
+    v-if="!openForm"
     class="display-info"
     :class="{'open' : openMenu}"
   >
@@ -53,10 +53,9 @@
     class="edit-info"
   >
     <MovieForm
-      :movieId="movieData.id"
-      :movieData="editedMovie"
+      :movieData="editMovie"
       :type="'editMovie'"
-      @dataEdit="reflectChanges"
+      @dataEdit="reflectEdit"
     />
     <span
       class="invalid"
@@ -77,8 +76,8 @@
       type="button"
       name="edit"
       class="primary"
-      @click="toggle('editOpen')"
-      v-if="!editOpen"
+      @click="toggle('openForm')"
+      v-if="!openForm"
     >Edit</button>
     <div v-else>
       <button
@@ -122,14 +121,14 @@ export default {
   data() {
     return {
       openMenu: false,
-      editOpen: false,
-      editedMovie: {
+      openForm: false,
+      editMovie: {
+        id: this.movieData.id,
         title: this.movieData.title,
         year: this.movieData.year,
         length: this.movieData.length,
         desc: this.movieData.desc,
       },
-      receivedData: '',
       enableSaving: true,
       invalidInput: false
     }
@@ -137,9 +136,9 @@ export default {
   computed: {
     prettyLength: function() {
       const length = this.movieData.length
-      const hours = length > 60 ? `${Math.floor(length/60)}h` : ''
-      const minutes = `${length % 60}min`
-      return `${hours} ${minutes}`
+      const hours = length >= 60 ? `${Math.floor(length/60)}h` : ''
+      const minutes = length % 60 > 0 ? ` ${length % 60}min` : ''
+      return `${hours}${minutes}`
     },
     ratingInNumber: function() {
       return parseInt( this.movieData.rating )
@@ -152,27 +151,27 @@ export default {
     toggle: function( el ) {
       this[ el ] = !this[ el ]
     },
-    reflectChanges: function( emittedData, enableSaving ) {
+    reflectEdit: function( formMovie, enableSaving ) {
       if ( enableSaving !== this.enableSaving ) {
         this.enableSaving = enableSaving;
         this.invalidInput = false;
       }
-      if ( emittedData.title !== this.editedMovie.title ) this.editedMovie.title = emittedData.title;
-      if ( emittedData.year !== this.editedMovie.year ) this.editedMovie.year = emittedData.year;
-      if ( emittedData.desc !== this.editedMovie.desc ) this.editedMovie.desc = emittedData.desc;
-      if ( emittedData.length !== this.editedMovie.length ) this.editedMovie.length = emittedData.length;
+      if ( formMovie.title !== this.editMovie.title ) this.editMovie.title = formMovie.title;
+      if ( formMovie.year !== this.editMovie.year ) this.editMovie.year = formMovie.year;
+      if ( formMovie.desc !== this.editMovie.desc ) this.editMovie.desc = formMovie.desc;
+      if ( formMovie.length !== this.editMovie.length ) this.editMovie.length = formMovie.length;
     },
     cancelEdit: function() {
-      this.toggle( 'editOpen' );
-      this.editedMovie.title = this.movieData.title;
-      this.editedMovie.year = this.movieData.year;
-      this.editedMovie.length = this.movieData.length;
-      this.editedMovie.desc = this.movieData.desc;
+      this.toggle( 'openForm' );
+      this.editMovie.title = this.movieData.title;
+      this.editMovie.year = this.movieData.year;
+      this.editMovie.length = this.movieData.length;
+      this.editMovie.desc = this.movieData.desc;
     },
     saveChanges: function() {
       if ( this.enableSaving ) {
-        this.toggle( 'editOpen' );
-        this.$emit( 'save', this.movieData.id, this.editedMovie );
+        this.toggle( 'openForm' );
+        this.$emit( 'save', this.editMovie );
       } else {
         this.invalidInput = true;
       }

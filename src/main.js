@@ -14,11 +14,12 @@ const dict = {
     },
     year: {
       required: () => 'Year cannot be empty.',
-      min_value: () => 'The first movie was made in 1888. 🙂 (Year must be 1888 or later)',
-      max_value: () => 'Noone can look this far into the future. 🙂 (Year must be 2030 or earlier)'
+      min_value: () => 'Year must be 1888 or later',
+      max_value: () => 'Year must be 2030 or earlier'
     },
     length: {
-      numeric: () => 'Length doesn\'t accept decimals.'
+      numeric: () => 'Length doesn\'t accept decimals.',
+      min_value: () => 'Minimum length is 1 minute.'
     }
   }
 }

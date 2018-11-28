@@ -1,9 +1,9 @@
 <template>
 <!-- ADD MOVIE -->
 <form
-  class="movie-form adding"
   v-if="type==='addMovie'"
   :key="'newMovie'"
+  class="movie-form adding"
 >
   <fieldset>
     <h3>Add Movie</h3>
@@ -13,10 +13,11 @@
     <input
       type="text"
       name="title"
+      v-focus
       v-model="formMovie.title"
       v-validate="'required'"
-      :class="{ 'invalid': errors.has('addMovie.title')}"
       data-vv-scope="addMovie"
+      :class="{ 'invalid': errors.has('addMovie.title')}"
     >
     <span
       v-if="errors.has('addMovie.title')"
@@ -30,17 +31,19 @@
       <input
         type="number"
         name="year"
-        v-model="formMovie.year"
         min="1988"
+        v-model="formMovie.year"
         v-validate="'required|max_value:2030'"
         data-vv-validate-on="blur|change"
-        :class="{ 'invalid': errors.has('addMovie.year')}"
         data-vv-scope="addMovie"
+        :class="{ 'invalid': errors.has('addMovie.year')}"
       >
       <span
         v-if="errors.has('addMovie.year')"
         class="invalid"
-      >{{ errors.first('addMovie.year') }}</span>
+      >
+        {{ errors.first('addMovie.year') }}
+      </span>
     </fieldset>
     <fieldset>
       <label for="length">Length (in min)</label>
@@ -48,108 +51,119 @@
         type="number"
         name="length"
         v-model="formMovie.length"
-        v-validate="'numeric|min:1'"
-        :class="{ 'invalid': errors.has('addMovie.length')}"
+        v-validate="'numeric|min:1|min_value:1'"
         data-vv-scope="addMovie"
+        :class="{ 'invalid': errors.has('addMovie.length')}"
       >
       <span
         v-if="errors.has('addMovie.length')"
         class="invalid"
-      >{{ errors.first('addMovie.length') }}</span>
+      >
+        {{ errors.first('addMovie.length') }}
+      </span>
     </fieldset>
   </div>
   <fieldset>
     <label for="desc">Description</label>
     <textarea
       name="desc"
-      rows="6"
+      rows="5"
       cols="60"
       v-model="formMovie.desc"
       v-validate="'min:0'"
-      :class="{ 'invalid': errors.has('addMovie.desc') }"
       data-vv-scope="addMovie"
+      :class="{ 'invalid': errors.has('addMovie.desc') }"
     />
-    <span v-if="errors.has('addMovie.desc')" class="invalid" >{{ errors.first('addMovie.desc') }}</span>
+    <span
+      v-if="errors.has('addMovie.desc')"
+      class="invalid"
+    >
+      {{ errors.first('addMovie.desc') }}
+    </span>
   </fieldset>
   <div v-if="type==='addMovie'" class="buttons">
     <span v-if="invalidInput" class="invalid" >Please correct the errors.</span>
     <span v-else class="info" >* required fields</span>
-    <button class="secondary" type="button" name="button" v-on:click="$emit('cancel')">Cancel</button>
-    <button class="primary" type="button" name="button" v-on:click="validateBeforeSubmit('addMovie')">Save</button>
+    <button type="button" name="button" v-on:click="$emit('cancel')" class="secondary">Cancel</button>
+    <button type="button" name="button" v-on:click="validateBeforeSubmit('addMovie')" class="primary">Save</button>
   </div>
 </form>
 
 <!-- EDIT MOVIE -->
 
 <form
-  class="movie-form edit-movie"
-  v-on:submit.prevent="validateBeforeSubmit"
   v-else-if="type==='editMovie'"
+  v-on:submit.prevent="validateBeforeSubmit"
+  class="movie-form edit-movie"
 >
-  <div class="cardHead">
+  <div class="card-head">
     <fieldset class="fieldset-title">
       <input
         type="text"
         name="title"
+        placeholder="Title"
+        v-focus
         v-model="formMovie.title"
         v-validate="'required'"
-        :class="{ 'invalid': errors.has(`edit${this.movieId}.title`)}"
-        placeholder="Title"
-        :data-vv-scope="`edit${this.movieId}`"
+        :data-vv-scope="`edit${movieData.id}`"
+        :class="{ 'invalid': errors.has(`edit${movieData.id}.title`)}"
       >
       <span
-        v-if="errors.has(`edit${this.movieId}.title`)"
+        v-if="errors.has(`edit${movieData.id}.title`)"
         class="invalid"
-      >{{ errors.first(`edit${this.movieId}.title`) }}</span>
+      >
+        {{ errors.first(`edit${movieData.id}.title`) }}
+      </span>
     </fieldset>
     <fieldset class="fieldset-year">
       <input
         type="number"
         name="year"
-        v-model="formMovie.year"
+        placeholder="Year"
         min="1988"
+        v-model="formMovie.year"
         v-validate="'required|max_value:2030'"
         data-vv-validate-on="blur|change"
-        :class="{'invalid': errors.has(`edit${this.movieId}.year`)}"
-        placeholder="Year"
-        :data-vv-scope="`edit${this.movieId}`"
+        :data-vv-scope="`edit${movieData.id}`"
+        :class="{'invalid': errors.has(`edit${movieData.id}.year`)}"
       >
       <span
-        v-if="errors.has(`edit${this.movieId}.year`)"
+        v-if="errors.has(`edit${movieData.id}.year`)"
         class="invalid"
-      >{{ errors.first(`edit${this.movieId}.year`) }}</span>
+      >
+        {{ errors.first(`edit${movieData.id}.year`) }}
+      </span>
     </fieldset>
   </div>
   <div class="cardDesc">
     <fieldset>
       <textarea
         name="desc"
-        rows="6"
-        cols="60"
+        placeholder="Description"
+        rows="4"
         v-model="formMovie.desc"
         v-validate="'min:0'"
-        :class="{ 'invalid': errors.has(`edit${this.movieId}.desc`) }"
-        placeholder="Description"
-        :data-vv-scope="`edit${this.movieId}`"
+        :data-vv-scope="`edit${movieData.id}`"
+        :class="{ 'invalid': errors.has(`edit${movieData.id}.desc`) }"
       />
-      <span v-if="errors.has(`edit${this.movieId}.desc`)" class="invalid" >{{ errors.first(`edit${this.movieId}.desc`) }}</span>
+      <span v-if="errors.has(`edit${movieData.id}.desc`)" class="invalid" >{{ errors.first(`edit${movieData.id}.desc`) }}</span>
     </fieldset>
   </div>
-  <div class="cardDetails">
+  <div class="card-details">
     <fieldset>
       <input
         type="number"
         name="length"
-        v-model="formMovie.length"
-        v-validate="'numeric|min:1'"
-        :class="{ 'invalid': errors.has(`edit${this.movieId}.length`) }"
         placeholder="Length (in min)"
-        :data-vv-scope="`edit${this.movieId}`"
+        v-model="formMovie.length"
+        v-validate="'numeric|min:1|min_value:1'"
+        :data-vv-scope="`edit${movieData.id}`"
+        :class="{ 'invalid': errors.has(`edit${movieData.id}.length`) }"
       >
       <span
-        v-if="errors.has(`edit${this.movieId}.length`)"
+        v-if="errors.has(`edit${movieData.id}.length`)"
         class="invalid"
-      >{{ errors.first(`edit${this.movieId}.length`) }}</span>
+      >{{ errors.first(`edit${movieData.id}.length`) }}</span>
     </fieldset>
   </div>
 </form>
@@ -158,6 +172,23 @@
 <script>
 export default {
   name: 'MovieForm',
+  directives: {
+    focus: {
+      inserted: function( el ) {
+        el.focus()
+      }
+    }
+  },
+  props: {
+    type: String,
+    movieData: {
+      id: Number,
+      title: String,
+      year: Number,
+      length: Number,
+      desc: String
+    },
+  },
   data() {
     return {
       formMovie: {
@@ -169,10 +200,15 @@ export default {
       invalidInput: false
     }
   },
-  props: {
-    type: String,
-    movieId: Number,
-    movieData: Object,
+  updated() {
+    if ( this.type === "editMovie" ) {
+      const enableSaving = ( this.errors.items.length === 0 );
+      this.$emit( 'dataEdit', this.formMovie, enableSaving );
+    } else {
+      if ( this.errors.items.length === 0 && this.invalidInput === true ) {
+        this.invalidInput = false
+      }
+    }
   },
   methods: {
     validateBeforeSubmit( scope ) {
@@ -188,16 +224,6 @@ export default {
     emitMovie() {
       this.$emit( 'addMovie', this.formMovie );
     },
-  },
-  updated() {
-    if ( this.type === "editMovie" ) {
-      const enableSaving = ( this.errors.items.length === 0 );
-      this.$emit( 'dataEdit', this.formMovie, enableSaving );
-    } else {
-      if ( this.errors.items.length === 0 && this.invalidInput === true ) {
-        this.invalidInput = false
-      }
-    }
   },
 }
 </script>
@@ -277,7 +303,7 @@ input, textarea {
   background-color: hsla(265, 10%, 87%, 0.6);
   margin: 0.2rem auto 0.1rem;
   box-sizing: border-box;
-  padding: 0.3rem;
+  padding: 0.2rem;
 }
 input::placeholder, textarea::placeholder {
   color: hsla(265, 10%, 68%, 1);
@@ -288,16 +314,19 @@ textarea {
 input.invalid, textarea.invalid {
   border: 2px solid rgba(220, 70, 70, 1);
 }
-.cardHead {
+.edit-movie fieldset {
+  padding-bottom: 0;
+}
+.card-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   width: 100%;
 }
-.cardHead fieldset.fieldset-title {
-  width: 74%;
+.card-head fieldset {
+  width: 48%;
 }
-.cardHead fieldset.fieldset-year {
-  width: 22%;
+.card-details fieldset {
+  width: 48%;
 }
 </style>
