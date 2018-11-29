@@ -56,7 +56,7 @@
       type="button"
       name="remove"
       class="delete"
-      @click="$emit('remove', $event.target)"
+      @click="$emit('remove')"
     >Delete Movie</button>
     <button
       type="button"

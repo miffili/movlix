@@ -20,9 +20,8 @@
     <MovieCard
       v-for="(movie, index) in movies"
       :key="movie.id"
-      :data-index="index"
       :movieData="movie"
-      @remove="removeMovie"
+      @remove="removeMovie(index)"
       @save="updateMovie"
     />
   </main>
@@ -148,8 +147,8 @@ export default {
       }
       this.updateLocalStorage()
     },
-    removeMovie: function( target ) {
-      this.movies.splice( target.dataIndex, 1 )
+    removeMovie: function( index ) {
+      this.movies.splice( index, 1 )
       this.updateLocalStorage()
     },
     updateLocalStorage: function() {
